@@ -2,17 +2,67 @@ import React, { useState, useEffect } from 'react';
 import {
   Video, Star, Clock, CheckCircle2, RefreshCw, AlertCircle,
 } from 'lucide-react';
-import { doctorApi } from '../api/api';
+import { doctorApi, isDemoSession } from '../api/api';
+
+// Avatar fallback using ui-avatars.com — no external images, never 404s
+const avatarUrl = (name, bg = '0e7490') =>
+  `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&size=200&background=${bg}&color=ffffff&bold=true`;
+
+// Demo doctors — used when backend is unreachable or in demo mode
+const DEMO_DOCTORS = [
+  {
+    _id: 'demo-1',
+    name: 'Dr. Rajesh Sharma',
+    specialization: 'General Physician & AI Triage Specialist',
+    experience: '14 Yrs Exp',
+    rating: '4.9 (320+ consultations)',
+    languages: ['Hindi', 'English', 'Bhojpuri'],
+    availability: 'Available Now',
+    isActive: true,
+    image: avatarUrl('Rajesh Sharma', '0e7490'),
+  },
+  {
+    _id: 'demo-2',
+    name: 'Dr. Ananya Patel',
+    specialization: 'Pediatrician & Rural Health Lead',
+    experience: '10 Yrs Exp',
+    rating: '4.95 (410+ consultations)',
+    languages: ['Hindi', 'Gujarati', 'English'],
+    availability: 'In 15 Mins',
+    isActive: false,
+    image: avatarUrl('Ananya Patel', '7c3aed'),
+  },
+  {
+    _id: 'demo-3',
+    name: 'Dr. Vikram Sethi',
+    specialization: 'Cardiologist & Emergency Care',
+    experience: '18 Yrs Exp',
+    rating: '4.88 (500+ consultations)',
+    languages: ['Hindi', 'Punjabi', 'English'],
+    availability: 'Available Today',
+    isActive: true,
+    image: avatarUrl('Vikram Sethi', '065f46'),
+  },
+];
 
 export const RemoteConsultation = () => {
-  const [doctors, setDoctors]             = useState([]);
-  const [loading, setLoading]             = useState(true);
+  const [doctors, setDoctors]               = useState([]);
+  const [loading, setLoading]               = useState(true);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [booking, setBooking]             = useState(false);
+  const [booking, setBooking]               = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
-  const [bookingError, setBookingError]   = useState(null);
+  const [bookingError, setBookingError]     = useState(null);
 
   useEffect(() => {
+    // Demo sessions use a fake token that the backend rejects with 401.
+    // Skip the API call entirely and go straight to demo data.
+    if (isDemoSession()) {
+      setDoctors(DEMO_DOCTORS);
+      setSelectedDoctor(DEMO_DOCTORS[0]);
+      setLoading(false);
+      return;
+    }
+
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 6000);
 
@@ -23,10 +73,10 @@ export const RemoteConsultation = () => {
           setDoctors(list);
           setSelectedDoctor(list[0]);
         }
-        // empty list → fall through to demo data silently
+        // empty list → fall through to demo data below
       })
       .catch(() => {
-        // Backend unavailable — demo doctors will be shown, no error shown to user
+        // Backend unavailable — demo doctors shown, no error to user
       })
       .finally(() => {
         clearTimeout(timeout);
@@ -41,8 +91,17 @@ export const RemoteConsultation = () => {
     setBooking(true);
     setBookingError(null);
 
+    // Demo mode — simulate a successful booking without hitting the API
+    if (isDemoSession() || selectedDoctor._id.startsWith('demo-')) {
+      setTimeout(() => {
+        setBookingSuccess(true);
+        setBooking(false);
+        setTimeout(() => setBookingSuccess(false), 4000);
+      }, 800);
+      return;
+    }
+
     try {
-      // Schedule 24 hours from now as a sensible default
       const scheduledAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
       await doctorApi.createAppointment({
         doctor: selectedDoctor._id,
@@ -58,43 +117,6 @@ export const RemoteConsultation = () => {
       setBooking(false);
     }
   };
-
-  // Fallback demo doctors shown when API is unavailable / user not logged in
-  const DEMO_DOCTORS = [
-    {
-      _id: 'demo-1',
-      name: 'Dr. Rajesh Sharma',
-      specialization: 'General Physician & AI Triage Specialist',
-      experience: '14 Yrs Exp',
-      rating: '4.9 (320+ consultations)',
-      languages: ['Hindi', 'English', 'Bhojpuri'],
-      availability: 'Available Now',
-      isActive: true,
-      image: 'https://randomuser.me/api/portraits/men/75.jpg',
-    },
-    {
-      _id: 'demo-2',
-      name: 'Dr. Ananya Patel',
-      specialization: 'Pediatrician & Rural Health Lead',
-      experience: '10 Yrs Exp',
-      rating: '4.95 (410+ consultations)',
-      languages: ['Hindi', 'Gujarati', 'English'],
-      availability: 'In 15 Mins',
-      isActive: false,
-      image: 'https://randomuser.me/api/portraits/women/44.jpg',
-    },
-    {
-      _id: 'demo-3',
-      name: 'Dr. Vikram Sethi',
-      specialization: 'Cardiologist & Emergency Care',
-      experience: '18 Yrs Exp',
-      rating: '4.88 (500+ consultations)',
-      languages: ['Hindi', 'Punjabi', 'English'],
-      availability: 'Available Today',
-      isActive: true,
-      image: 'https://randomuser.me/api/portraits/men/32.jpg',
-    },
-  ];
 
   const displayDoctors = (!loading && doctors.length === 0) ? DEMO_DOCTORS : doctors;
 

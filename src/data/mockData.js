@@ -24,7 +24,7 @@ export const mockData = {
       languages: ["Hindi", "English", "Bhojpuri"],
       availability: "Available Now",
       status: "online",
-      image: "https://randomuser.me/api/portraits/men/75.jpg"
+      image: "https://ui-avatars.com/api/?name=Rajesh+Sharma&size=200&background=0e7490&color=ffffff&bold=true"
     },
     {
       id: 2,
@@ -35,7 +35,7 @@ export const mockData = {
       languages: ["Hindi", "Gujarati", "English"],
       availability: "In 15 Mins",
       status: "busy",
-      image: "https://randomuser.me/api/portraits/women/44.jpg"
+      image: "https://ui-avatars.com/api/?name=Ananya+Patel&size=200&background=7c3aed&color=ffffff&bold=true"
     },
     {
       id: 3,
@@ -46,7 +46,7 @@ export const mockData = {
       languages: ["Hindi", "Punjabi", "English"],
       availability: "Available Today",
       status: "online",
-      image: "https://randomuser.me/api/portraits/men/32.jpg"
+      image: "https://ui-avatars.com/api/?name=Vikram+Sethi&size=200&background=065f46&color=ffffff&bold=true"
     }
   ],
 

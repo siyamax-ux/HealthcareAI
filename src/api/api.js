@@ -2,15 +2,21 @@
 //  SetuHealth AI — centralised API client
 // ─────────────────────────────────────────────────────────
 
-// On Vercel (and in production generally), frontend and backend are on the
-// same origin, so /api is correct and avoids CORS altogether.
+// On Vercel, frontend and backend are the same origin, so /api works as a
+// relative path with no CORS issues.
 // In local dev, Vite's proxy forwards /api → localhost:5000 automatically.
 const BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
-/** Default request timeout in ms — aborts hung connections */
+/** Default request timeout in ms */
 const DEFAULT_TIMEOUT_MS = 8000;
 
 const getToken = () => localStorage.getItem('setu_token');
+
+/** Demo tokens are fake — never send them to the real backend */
+export const isDemoSession = () => {
+  const t = getToken();
+  return !!t && t.startsWith('demo-token-');
+};
 
 const headers = (isMultipart = false) => {
   const h = {};
@@ -20,7 +26,7 @@ const headers = (isMultipart = false) => {
   return h;
 };
 
-/** Parse the response, converting HTTP errors and network errors to friendly messages */
+/** Parse the response, converting HTTP errors to thrown Errors */
 const handleResponse = async (res) => {
   let data;
   try {
@@ -38,15 +44,13 @@ const handleResponse = async (res) => {
 };
 
 /**
- * Wraps fetch with:
- *  - a merged AbortSignal (caller signal + internal timeout)
- *  - friendly "Failed to fetch" → "Server unreachable" rewrite
+ * Wraps fetch with an AbortSignal timeout.
+ * No localhost fallback — that caused infinite retry loops in the console.
  */
 const safeFetch = async (url, options = {}, callerSignal) => {
   const timeoutCtrl = new AbortController();
   const timeoutId = setTimeout(() => timeoutCtrl.abort(), DEFAULT_TIMEOUT_MS);
 
-  // Merge caller signal (if any) with the timeout signal
   const signals = [timeoutCtrl.signal];
   if (callerSignal) signals.push(callerSignal);
   const signal = AbortSignal.any ? AbortSignal.any(signals) : timeoutCtrl.signal;
@@ -55,14 +59,12 @@ const safeFetch = async (url, options = {}, callerSignal) => {
     const res = await fetch(url, { ...options, signal });
     return res;
   } catch (err) {
-    const isTimeout = err.name === 'AbortError';
-    const isNetworkError = err.message?.toLowerCase().includes('fetch') || err.message?.toLowerCase().includes('network');
-
-    if (isTimeout) {
+    if (err.name === 'AbortError') {
       throw new Error('Request timed out. Please check your connection and try again.');
     }
-    if (isNetworkError) {
-      throw new Error('Cannot reach the server. Please ensure the backend is running, then try again.');
+    const msg = err.message?.toLowerCase() ?? '';
+    if (msg.includes('fetch') || msg.includes('network') || msg.includes('failed')) {
+      throw new Error('Cannot reach the server. Please ensure the backend is running.');
     }
     throw err;
   } finally {
@@ -111,39 +113,29 @@ export const api = {
 const normalizeUser = (user) => {
   if (!user) return null;
   const u = { ...user };
-  if (u.role === 'health_worker') {
-    u.role = 'healthworker';
-  }
+  if (u.role === 'health_worker') u.role = 'healthworker';
   return u;
 };
 
 export const authApi = {
   login: (email, password) =>
     api.post('/auth/login', { email, password }).then(data => {
-      if (data && data.user) {
-        data.user = normalizeUser(data.user);
-      }
+      if (data?.user) data.user = normalizeUser(data.user);
       return data;
     }),
 
-  register: (data) => {
-    const payload = { ...data };
-    if (payload.role === 'healthworker') {
-      payload.role = 'health_worker';
-    }
-    return api.post('/auth/register', payload).then(data => {
-      if (data && data.user) {
-        data.user = normalizeUser(data.user);
-      }
+  register: (payload) => {
+    const body = { ...payload };
+    if (body.role === 'healthworker') body.role = 'health_worker';
+    return api.post('/auth/register', body).then(data => {
+      if (data?.user) data.user = normalizeUser(data.user);
       return data;
     });
   },
 
   getMe: () =>
     api.get('/auth/me').then(data => {
-      if (data && data.user) {
-        data.user = normalizeUser(data.user);
-      }
+      if (data?.user) data.user = normalizeUser(data.user);
       return data;
     }),
 
@@ -167,81 +159,64 @@ export const authApi = {
 
 // ─── Analytics ────────────────────────────────────────────
 export const analyticsApi = {
-  getSummary:         () => api.get('/analytics/summary'),
-  getRiskDistribution:() => api.get('/analytics/risk'),
-  getStatusDistrib:   () => api.get('/analytics/status'),
-  getRecentActivity:  () => api.get('/analytics/recent'),
+  getSummary:          () => api.get('/analytics/summary'),
+  getRiskDistribution: () => api.get('/analytics/risk'),
+  getStatusDistrib:    () => api.get('/analytics/status'),
+  getRecentActivity:   () => api.get('/analytics/recent'),
 };
 
 // ─── Patients ─────────────────────────────────────────────
 export const patientApi = {
-  getAll:   ()       => api.get('/patients'),
-  getOne:   (id)     => api.get(`/patients/${id}`),
-  create:   (data)   => api.post('/patients', data),
-  update:   (id, data) => api.put(`/patients/${id}`, data),
-  remove:   (id)     => api.delete(`/patients/${id}`),
+  getAll:            ()          => api.get('/patients'),
+  getOne:            (id)        => api.get(`/patients/${id}`),
+  create:            (data)      => api.post('/patients', data),
+  update:            (id, data)  => api.put(`/patients/${id}`, data),
+  remove:            (id)        => api.delete(`/patients/${id}`),
 };
 
 // ─── Consultations ────────────────────────────────────────
 export const consultationApi = {
-  getAll:   ()         => api.get('/consultations'),
-  getOne:   (id)       => api.get(`/consultations/${id}`),
-  create:   (data)     => api.post('/consultations', data),
-  update:   (id, data) => api.put(`/consultations/${id}`, data),
+  getAll:   ()          => api.get('/consultations'),
+  getOne:   (id)        => api.get(`/consultations/${id}`),
+  create:   (data)      => api.post('/consultations', data),
+  update:   (id, data)  => api.put(`/consultations/${id}`, data),
 };
 
 // ─── AI ───────────────────────────────────────────────────
 export const aiApi = {
-  /** Full AI analysis — requires a saved consultationId */
-  analyze: (consultationId) =>
-    api.post('/ai/analyze', { consultationId }),
-
-  /** Instant risk-only check — no DB write, no Gemini call */
-  riskCheck: (vitals, symptoms) =>
-    api.post('/ai/risk', { vitals, symptoms }),
+  analyze:   (consultationId)     => api.post('/ai/analyze', { consultationId }),
+  riskCheck: (vitals, symptoms)   => api.post('/ai/risk', { vitals, symptoms }),
 };
 
 // ─── Emergency ────────────────────────────────────────────
 export const emergencyApi = {
-  flag:      (consultationId, reason) =>
-    api.post('/emergency/flag', { consultationId, reason }),
-  getAlerts: () => api.get('/emergency/alerts'),
+  flag:      (consultationId, reason) => api.post('/emergency/flag', { consultationId, reason }),
+  getAlerts: ()                       => api.get('/emergency/alerts'),
 };
 
 // ─── Doctors / Appointments / Referrals ──────────────────
 export const doctorApi = {
   getAll:            (signal) => api.get('/doctors', signal),
-  getAppointments:   ()     => api.get('/doctors/appointments'),
-  createAppointment: (data) => api.post('/doctors/appointments', data),
-  createReferral:    (data) => api.post('/doctors/referrals', data),
-  getReferrals:      ()     => api.get('/doctors/referrals'),
+  getAppointments:   ()       => api.get('/doctors/appointments'),
+  createAppointment: (data)   => api.post('/doctors/appointments', data),
+  createReferral:    (data)   => api.post('/doctors/referrals', data),
+  getReferrals:      ()       => api.get('/doctors/referrals'),
 };
 
 // ─── Documents / OCR ─────────────────────────────────────
 export const documentApi = {
   upload: (patientId, file, documentType = 'other', notes = '') => {
     const form = new FormData();
-    form.append('document', file);          // field name MUST be "document"
+    form.append('document', file);
     form.append('patientId', patientId);
     form.append('documentType', documentType);
     if (notes) form.append('notes', notes);
     return api.postForm('/documents', form);
   },
 
-  getByPatient: (patientId) =>
-    api.get(`/documents/patient/${patientId}`),
-
-  getOne: (id) =>
-    api.get(`/documents/${id}`),
-
-  remove: (id) =>
-    api.delete(`/documents/${id}`),
-
-  /** Run Tesseract OCR on an already-uploaded document */
-  extractOcr: (documentId) =>
-    api.post('/ocr/extract', { documentId }),
-
-  /** Get cached OCR result */
-  getOcrResult: (documentId) =>
-    api.get(`/ocr/${documentId}`),
+  getByPatient:  (patientId)  => api.get(`/documents/patient/${patientId}`),
+  getOne:        (id)         => api.get(`/documents/${id}`),
+  remove:        (id)         => api.delete(`/documents/${id}`),
+  extractOcr:    (documentId) => api.post('/ocr/extract', { documentId }),
+  getOcrResult:  (documentId) => api.get(`/ocr/${documentId}`),
 };

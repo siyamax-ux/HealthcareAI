@@ -3,7 +3,7 @@ import {
   Users, Heart, ShieldCheck, Activity, Plus, Sparkles,
   CheckCircle2, AlertCircle, RefreshCw
 } from 'lucide-react';
-import { patientApi } from '../api/api';
+import { patientApi, isDemoSession } from '../api/api';
 import { mockData } from '../data/mockData';
 
 export const FamilyDashboard = () => {
@@ -12,6 +12,14 @@ export const FamilyDashboard = () => {
   const [selectedMember, setSelectedMember] = useState(null);
 
   useEffect(() => {
+    // Demo sessions use a fake token — skip API call and use mock data directly
+    if (isDemoSession()) {
+      setPatients(mockData.familyMembers);
+      setSelectedMember(mockData.familyMembers[0]);
+      setLoading(false);
+      return;
+    }
+
     patientApi.getAll()
       .then(data => {
         const list = data.patients || [];
@@ -25,7 +33,7 @@ export const FamilyDashboard = () => {
         }
       })
       .catch(() => {
-        // API not reachable (not logged in or backend down) — use mock
+        // API not reachable — use mock
         setPatients(mockData.familyMembers);
         setSelectedMember(mockData.familyMembers[0]);
       })
