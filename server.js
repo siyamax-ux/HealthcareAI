@@ -29,6 +29,13 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+// ===============================
+// STATIC FILE SERVING
+// Uploaded documents accessible at:
+// GET http://10.241.141.28:5000/uploads/<filename>
+// ===============================
+app.use("/uploads", express.static("uploads"));
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/patients", patientRoutes);
