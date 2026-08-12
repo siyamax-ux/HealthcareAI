@@ -1,5 +1,5 @@
 const express = require("express");
-const { analyze, riskCheck } = require("../controllers/aiController");
+const { analyze, riskCheck, getSupportedLanguages } = require("../controllers/aiController");
 const { protect, authorize } = require("../middleware/authMiddleware");
 
 const router = express.Router();
@@ -19,6 +19,13 @@ router.post(
   protect,
   authorize("doctor", "health_worker", "admin"),
   riskCheck
+);
+
+// Get list of supported languages
+router.get(
+  "/languages",
+  protect,
+  getSupportedLanguages
 );
 
 module.exports = router;

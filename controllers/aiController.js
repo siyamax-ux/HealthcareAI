@@ -14,7 +14,7 @@ const {
 
 const analyze = async (req, res) => {
   try {
-    const { consultationId } = req.body;
+    const { consultationId, language } = req.body;
 
     if (!consultationId) {
       return res.status(400).json({
@@ -36,10 +36,11 @@ const analyze = async (req, res) => {
 
     // Run AI + Risk Engine analysis
     const result = await analyzeConsultation({
-      patient:     consultation.patient,
-      symptoms:    consultation.symptoms,
-      vitals:      consultation.vitals,
+      patient:      consultation.patient,
+      symptoms:     consultation.symptoms,
+      vitals:       consultation.vitals,
       medicalNotes: consultation.medicalNotes,
+      language:     language || "english",
     });
 
     // Persist results back into the consultation record
@@ -155,4 +156,23 @@ const riskCheck = (req, res) => {
   }
 };
 
-module.exports = { analyze, riskCheck };
+// ========================================
+// GET SUPPORTED LANGUAGES
+// GET /api/ai/languages
+// ========================================
+
+const getSupportedLanguages = (req, res) => {
+  res.json({
+    success: true,
+    languages: [
+      { code: "english",  name: "English" },
+      { code: "hindi",    name: "Hindi — हिंदी" },
+      { code: "bengali",  name: "Bengali — বাংলা" },
+      { code: "gujarati", name: "Gujarati — ગુજરાતી" },
+      { code: "marathi",  name: "Marathi — मराठी" },
+      { code: "punjabi",  name: "Punjabi — ਪੰਜਾਬੀ" },
+    ],
+  });
+};
+
+module.exports = { analyze, riskCheck, getSupportedLanguages };

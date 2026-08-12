@@ -14,11 +14,23 @@ const DISCLAIMER =
   "This is AI-assisted decision support only. It does not constitute a medical diagnosis. Always consult a qualified healthcare professional for clinical decisions.";
 
 // -------------------------------------------------------
+// SUPPORTED LANGUAGES
+// -------------------------------------------------------
+const SUPPORTED_LANGUAGES = {
+  english: { name: "English",   instruction: "Respond in English." },
+  hindi:   { name: "Hindi",     instruction: "Respond entirely in Hindi (हिंदी में जवाब दें). Use simple language a rural health worker would understand." },
+  bengali: { name: "Bengali",   instruction: "Respond entirely in Bengali (বাংলায় উত্তর দিন). Use simple language a rural health worker would understand." },
+  gujarati:{ name: "Gujarati",  instruction: "Respond entirely in Gujarati (ગુજરાતીમાં જવાબ આપો). Use simple language a rural health worker would understand." },
+  marathi: { name: "Marathi",   instruction: "Respond entirely in Marathi (मराठीत उत्तर द्या). Use simple language a rural health worker would understand." },
+  punjabi: { name: "Punjabi",   instruction: "Respond entirely in Punjabi (ਪੰਜਾਬੀ ਵਿੱਚ ਜਵਾਬ ਦਿਓ). Use simple language a rural health worker would understand." },
+};
+
+// -------------------------------------------------------
 // BUILD PROMPT
 // Converts structured consultation data into a clear
 // clinical prompt that Gemini can reason about.
 // -------------------------------------------------------
-const buildPrompt = ({ patient, symptoms, vitals, medicalNotes, riskResult }) => {
+const buildPrompt = ({ patient, symptoms, vitals, medicalNotes, riskResult, language = "english" }) => {
   const vitalLines = vitals
     ? [
         vitals.temperature  != null ? `  - Temperature: ${vitals.temperature}°C`       : null,
@@ -29,9 +41,12 @@ const buildPrompt = ({ patient, symptoms, vitals, medicalNotes, riskResult }) =>
       ].filter(Boolean).join("\n")
     : "  Not provided";
 
-  return `You are Aarogya, a clinical decision-support AI for rural healthcare workers in India. 
+  const langConfig = SUPPORTED_LANGUAGES[language] || SUPPORTED_LANGUAGES.english;
+
+  return `You are Aarogya, a clinical decision-support AI for rural healthcare workers in India.
 You help health workers — not doctors — understand patient conditions and decide next steps.
 You must NEVER claim to diagnose or prescribe. Always recommend escalation when uncertain.
+LANGUAGE INSTRUCTION: ${langConfig.instruction}
 
 PATIENT CONTEXT:
 - Name: ${patient?.name || "Unknown"}
@@ -142,12 +157,18 @@ const parseAIResponse = (text, riskResult) => {
 // }
 // -------------------------------------------------------
 const analyzeConsultation = async (data) => {
-  const { patient, symptoms = [], vitals = {}, medicalNotes = "" } = data;
+  const { patient, symptoms = [], vitals = {}, medicalNotes = "", language = "english" } = data;
+
+  // Validate + normalize language
+  const normalizedLang = SUPPORTED_LANGUAGES[language?.toLowerCase()]
+    ? language.toLowerCase()
+    : "english";
 
   // Step 1 — Always run Risk Engine first (deterministic, fast, safe)
   const riskResult = assessRisk({ vitals, symptoms });
 
   // Step 2 — Try to call Gemini; if it fails, return risk-only result
+  // Pass language through to buildPrompt
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
@@ -169,7 +190,7 @@ const analyzeConsultation = async (data) => {
   }
 
   try {
-    const prompt = buildPrompt({ patient, symptoms, vitals, medicalNotes, riskResult });
+    const prompt = buildPrompt({ patient, symptoms, vitals, medicalNotes, riskResult, language: normalizedLang });
 
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,

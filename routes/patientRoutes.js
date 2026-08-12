@@ -6,6 +6,7 @@ const {
   getPatient,
   updatePatient,
   deletePatient,
+  getPatientTimeline,
 } = require("../controllers/patientController");
 
 const {
@@ -52,6 +53,14 @@ router.delete(
   protect,
   authorize("doctor", "admin"),
   deletePatient
+);
+
+// Get patient full health timeline
+router.get(
+  "/:id/timeline",
+  protect,
+  authorize("doctor", "health_worker", "admin"),
+  getPatientTimeline
 );
 
 module.exports = router;

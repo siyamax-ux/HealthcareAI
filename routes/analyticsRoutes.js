@@ -4,6 +4,8 @@ const {
   getRiskDistribution,
   getStatusDistribution,
   getRecentActivity,
+  getVillageHeatmap,
+  getDiseaseTrends,
 } = require("../controllers/analyticsController");
 const { protect, authorize } = require("../middleware/authMiddleware");
 
@@ -39,6 +41,22 @@ router.get(
   protect,
   authorize("doctor", "health_worker", "admin"),
   getRecentActivity
+);
+
+// Village-level disease heatmap data
+router.get(
+  "/villages",
+  protect,
+  authorize("doctor", "health_worker", "admin"),
+  getVillageHeatmap
+);
+
+// Disease/symptom trends over last 6 months
+router.get(
+  "/disease-trends",
+  protect,
+  authorize("doctor", "health_worker", "admin"),
+  getDiseaseTrends
 );
 
 module.exports = router;
