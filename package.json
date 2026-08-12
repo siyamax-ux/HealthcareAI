@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon --signal SIGTERM server.js",
+    "kill": "Get-Process node | Stop-Process -Force"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

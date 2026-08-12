@@ -13,6 +13,7 @@ const ocrRoutes = require("./routes/ocrRoutes");
 const doctorRoutes = require("./routes/doctorRoutes");
 const emergencyRoutes = require("./routes/emergencyRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 
 dotenv.config();
 
@@ -46,6 +47,7 @@ app.use("/api/ocr", ocrRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/emergency", emergencyRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/chat", chatRoutes);
 
 // ===============================
 // HEALTH CHECK / TEST ROUTE
