@@ -171,8 +171,8 @@ const analyzeConsultation = async (data) => {
   // Pass language through to buildPrompt
   const apiKey = process.env.GEMINI_API_KEY;
 
-  if (!apiKey) {
-    console.warn("⚠️  GEMINI_API_KEY not set — returning risk engine result only.");
+  if (!apiKey || apiKey === "your_gemini_api_key_here") {
+    console.warn("⚠️  GEMINI_API_KEY not set or is default placeholder — returning risk engine result only.");
     return {
       ...riskResult,
       summary: "AI analysis unavailable (API key not configured). Risk assessment is based on vital signs and symptoms only.",

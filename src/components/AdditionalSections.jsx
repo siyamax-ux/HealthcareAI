@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { 
   Bot, FileText, Mic, ShieldAlert, Users, Video, TrendingUp, Globe, 
-  WifiOff, ArrowRight, CheckCircle2, ChevronDown, Phone, Mail, MapPin, Send, HelpCircle
+  WifiOff, ArrowRight, CheckCircle2, ChevronDown, Phone, Mail, MapPin, Send, HelpCircle,
+  Wifi, UserPlus, UploadCloud, RefreshCw
 } from 'lucide-react';
+import { patientApi } from '../api/api';
 import { mockData } from '../data/mockData';
 
 export const PortalPreview = () => {
@@ -60,43 +62,270 @@ export const PortalPreview = () => {
 };
 
 export const OfflineSection = () => {
+  const [isOnline, setIsOnline] = useState(() => {
+    return typeof navigator !== 'undefined' ? navigator.onLine : true;
+  });
+  const [queue, setQueue] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('setu_offline_patients') || '[]');
+    } catch {
+      return [];
+    }
+  });
+
+  const [form, setForm] = useState({ name: '', age: '', gender: 'Male', village: '', phone: '' });
+  const [syncing, setSyncing] = useState(false);
+  const [syncSuccess, setSyncSuccess] = useState(false);
+  const [error, setError] = useState(null);
+
+  const saveQueue = (newQueue) => {
+    setQueue(newQueue);
+    localStorage.setItem('setu_offline_patients', JSON.stringify(newQueue));
+  };
+
+  const handleAddPatient = (e) => {
+    e.preventDefault();
+    if (!form.name || !form.age) {
+      setError('Name and Age are required.');
+      return;
+    }
+    const newPatient = {
+      id: `offline-${Date.now()}`,
+      name: form.name,
+      age: parseInt(form.age),
+      gender: form.gender,
+      village: form.village || 'Offline Cached',
+      phone: form.phone || '',
+      queuedAt: new Date().toISOString()
+    };
+    saveQueue([...queue, newPatient]);
+    setForm({ name: '', age: '', gender: 'Male', village: '', phone: '' });
+    setError(null);
+  };
+
+  const handleSync = async () => {
+    if (queue.length === 0) return;
+    setSyncing(true);
+    setError(null);
+    let successCount = 0;
+    const remainingQueue = [...queue];
+
+    try {
+      for (let i = 0; i < queue.length; i++) {
+        const patient = queue[i];
+        const { id, queuedAt, ...apiPayload } = patient;
+        
+        try {
+          await patientApi.create(apiPayload);
+          successCount++;
+          const idx = remainingQueue.findIndex(item => item.id === patient.id);
+          if (idx > -1) remainingQueue.splice(idx, 1);
+        } catch (apiErr) {
+          console.error(`Failed to sync patient ${patient.name}:`, apiErr.message);
+          throw new Error(`Sync failed at patient "${patient.name}": ${apiErr.message}`);
+        }
+      }
+
+      saveQueue(remainingQueue);
+      setSyncSuccess(true);
+      setTimeout(() => setSyncSuccess(false), 4000);
+    } catch (err) {
+      setError(err.message || 'Sync failed. Check connection.');
+      saveQueue(remainingQueue);
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  const handleRemove = (id) => {
+    saveQueue(queue.filter(item => item.id !== id));
+  };
+
   return (
-    <section id="offline" className="py-24 relative overflow-hidden">
+    <section id="offline" className="py-24 relative overflow-hidden bg-slate-950/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-5xl mx-auto rounded-3xl glass-panel p-8 sm:p-12 border border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/40">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-            <div className="md:col-span-4 text-center md:text-left">
-              <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-4 mx-auto md:mx-0">
+        
+        <div className="max-w-5xl mx-auto rounded-3xl glass-panel p-8 sm:p-12 border border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/40 space-y-8">
+          
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-800">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
                 <WifiOff className="w-8 h-8" />
               </div>
-              <h3 className="text-2xl font-extrabold text-white mb-2">
-                Offline Healthcare Support
-              </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Zero internet connection in deep forest villages? No problem. GramSwasthya AI stores data locally on mobile devices and auto-syncs when network is restored.
-              </p>
+              <div>
+                <h3 className="text-2xl font-extrabold text-white">
+                  Offline Outbox & Queue Sync
+                </h3>
+                <p className="text-xs text-slate-400 max-w-md">
+                  Collect patient data offline in zero-connectivity regions. The system queues profiles in local encrypted storage and syncs when online.
+                </p>
+              </div>
             </div>
 
-            <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                <h4 className="text-sm font-bold text-white">Local Encrypted Cache</h4>
-                <p className="text-xs text-slate-400">Patient vital history and voice recordings cached locally.</p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                <h4 className="text-sm font-bold text-white">Background Auto-Sync</h4>
-                <p className="text-xs text-slate-400">Automatic background sync when 2G/3G network detected.</p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                <h4 className="text-sm font-bold text-white">Lightweight AI Models</h4>
-                <p className="text-xs text-slate-400">Quantized ONNX models running directly inside browser/app.</p>
-              </div>
+            <div className="flex items-center gap-3 bg-slate-950 p-2.5 rounded-2xl border border-slate-800">
+              <span className="text-[10px] uppercase font-bold text-slate-400 px-2">Network Sim:</span>
+              <button
+                onClick={() => setIsOnline(!isOnline)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  isOnline 
+                    ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-400'
+                    : 'bg-rose-500/20 border border-rose-500/30 text-rose-400'
+                }`}
+              >
+                {isOnline ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
+                <span>{isOnline ? 'Online' : 'Offline'}</span>
+              </button>
             </div>
           </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <div className="lg:col-span-5 space-y-4">
+              <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider">
+                <UserPlus className="w-4 h-4" />
+                <span>Queue Patient Offline</span>
+              </div>
+              
+              <form onSubmit={handleAddPatient} className="space-y-3 bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Full Name</label>
+                  <input
+                    type="text"
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    placeholder="Sita Devi"
+                    className="w-full px-3 py-2 text-xs rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-cyan-500"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Age</label>
+                    <input
+                      type="number"
+                      value={form.age}
+                      onChange={(e) => setForm({ ...form, age: e.target.value })}
+                      placeholder="38"
+                      className="w-full px-3 py-2 text-xs rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-cyan-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Gender</label>
+                    <select
+                      value={form.gender}
+                      onChange={(e) => setForm({ ...form, gender: e.target.value })}
+                      className="w-full px-3 py-2 text-xs rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-cyan-500"
+                    >
+                      <option>Male</option>
+                      <option>Female</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Village</label>
+                  <input
+                    type="text"
+                    value={form.village}
+                    onChange={(e) => setForm({ ...form, village: e.target.value })}
+                    placeholder="Bhojpur, Bihar"
+                    className="w-full px-3 py-2 text-xs rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-cyan-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Phone (Optional)</label>
+                  <input
+                    type="text"
+                    value={form.phone}
+                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                    placeholder="+91 99887 76655"
+                    className="w-full px-3 py-2 text-xs rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-cyan-500"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold rounded-xl transition-all"
+                >
+                  Save to Outbox Queue
+                </button>
+              </form>
+            </div>
+
+            <div className="lg:col-span-7 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-wider">
+                  <UploadCloud className="w-4 h-4" />
+                  <span>Outbox Queue ({queue.length})</span>
+                </div>
+                
+                {queue.length > 0 && (
+                  <button
+                    onClick={handleSync}
+                    disabled={syncing || !isOnline}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      !isOnline 
+                        ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-800'
+                        : 'bg-purple-600 hover:bg-purple-500 text-white font-bold'
+                    }`}
+                  >
+                    {syncing ? (
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <UploadCloud className="w-3.5 h-3.5" />
+                    )}
+                    <span>{syncing ? 'Syncing...' : 'Sync to Cloud'}</span>
+                  </button>
+                )}
+              </div>
+
+              {error && (
+                <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-[11px] rounded-xl">
+                  {error}
+                </div>
+              )}
+
+              {syncSuccess && (
+                <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] rounded-xl flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Sync Complete! All offline profiles saved to database.</span>
+                </div>
+              )}
+
+              <div className="space-y-2 max-h-[280px] overflow-y-auto pr-1">
+                {queue.length === 0 ? (
+                  <div className="text-center py-12 text-slate-500 border border-slate-800 border-dashed rounded-2xl flex flex-col items-center gap-2 bg-slate-900/10">
+                    <WifiOff className="w-8 h-8 text-slate-600" />
+                    <span className="text-xs">Outbox is empty. Toggle network to offline and add profiles above!</span>
+                  </div>
+                ) : (
+                  queue.map((patient) => (
+                    <div key={patient.id} className="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-between gap-4">
+                      <div>
+                        <h4 className="text-sm font-bold text-white">{patient.name}</h4>
+                        <p className="text-[10px] text-slate-400">
+                          {patient.gender} • {patient.age} Yrs • {patient.village}
+                        </p>
+                        <span className="text-[8px] text-slate-500 font-mono">Queued: {new Date(patient.queuedAt).toLocaleTimeString()}</span>
+                      </div>
+                      
+                      <button
+                        onClick={() => handleRemove(patient.id)}
+                        className="p-1.5 text-xs text-rose-400 border border-rose-500/30 hover:bg-rose-600 hover:text-white rounded-xl transition-all"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
       </div>
     </section>

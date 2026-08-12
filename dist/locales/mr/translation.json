@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "मुख्यपृष्ठ",
+    "aiClinic": "AI व्हर्च्युअल क्लिनिक",
+    "voiceDoctor": "व्हॉइस डॉक्टर",
+    "aiLanguages": "AI भाषा",
+    "iotVitals": "IoT व्हायटल्स",
+    "emergency": "आणीबाणी जोखीम",
+    "medicalOcr": "वैद्यकीय OCR",
+    "diseasePrediction": "रोग अंदाज",
+    "remoteDoctors": "दूरस्थ डॉक्टर",
+    "offlineSync": "ऑफलाइन सिंक",
+    "faq": "वारंवार विचारले जाणारे प्रश्न",
+    "launchClinic": "AI क्लिनिक सुरू करा",
+    "emergencySos": "AI आणीबाणी SOS",
+    "languages": "भाषा",
+    "switchLanguage": "भाषा बदला"
+  },
+  "hero": {
+    "badge": "AI-चालित ग्रामीण आरोग्यसेवा व्यासपीठ",
+    "title": "प्रत्येक गावासाठी AI डॉक्टर",
+    "subtitle": "त्वरित बहुभाषिक वैद्यकीय सहाय्य — आवाज, मजकूर आणि AI निदान — 24/7 उपलब्ध।",
+    "startConsultation": "AI सल्ला सुरू करा",
+    "emergencyHelp": "आणीबाणी मदत",
+    "trustBadges": {
+      "available247": "24/7 उपलब्ध",
+      "multiLanguage": "बहुभाषिक",
+      "emergencyReady": "आणीबाणीसाठी तयार",
+      "aiPowered": "AI चालित"
+    }
+  },
+  "assistant": {
+    "greeting": "नमस्कार! 🙏",
+    "subtitle": "मी तुमचा AI आरोग्य सहाय्यक आहे. तुमचा आरोग्य प्रश्न मराठीत विचारा.",
+    "placeholder": "तुमचा आरोग्य प्रश्न टाइप करा किंवा बोला…",
+    "aiChat": "AI चॅट",
+    "emergency": "आणीबाणी",
+    "listening": "ऐकत आहे…",
+    "active": "सक्रिय · बहुभाषिक",
+    "firstAid": "AI प्रथमोपचार"
+  },
+  "geo": {
+    "detecting": "स्थान शोधत आहे…",
+    "detected": "स्थान आढळले",
+    "detectedLocation": "आढळलेले स्थान",
+    "languageSwitchedTo": "भाषा बदलली",
+    "aiReadyIn": "AI सहाय्यक तयार आहे",
+    "changeManually": "स्वहस्ते भाषा बदला",
+    "continueIn": "मध्ये सुरू ठेवा",
+    "couldNotDetect": "स्थान आपोआप शोधता आले नाही.",
+    "tryAgain": "पुन्हा प्रयत्न करा",
+    "healthSchemes": "आरोग्य योजना",
+    "notification": "तुमच्या स्थानानुसार भाषा बदलली गेली."
+  },
+  "common": {
+    "loading": "लोड होत आहे…",
+    "close": "बंद करा",
+    "change": "बदला",
+    "confirm": "पुष्टी करा",
+    "cancel": "रद्द करा",
+    "submit": "सबमिट करा",
+    "book": "अपॉइंटमेंट बुक करा",
+    "call": "कॉल करा",
+    "readMore": "अधिक वाचा"
+  }
+}

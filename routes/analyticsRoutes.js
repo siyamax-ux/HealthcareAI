@@ -15,7 +15,7 @@ const router = express.Router();
 router.get(
   "/summary",
   protect,
-  authorize("doctor", "health_worker", "admin"),
+  authorize("doctor", "health_worker", "patient", "admin"),
   getSummary
 );
 
@@ -23,7 +23,7 @@ router.get(
 router.get(
   "/risk",
   protect,
-  authorize("doctor", "health_worker", "admin"),
+  authorize("doctor", "health_worker", "patient", "admin"),
   getRiskDistribution
 );
 
@@ -31,7 +31,7 @@ router.get(
 router.get(
   "/status",
   protect,
-  authorize("doctor", "health_worker", "admin"),
+  authorize("doctor", "health_worker", "patient", "admin"),
   getStatusDistribution
 );
 

@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "ಮುಖಪುಟ",
+    "aiClinic": "AI ವರ್ಚುವಲ್ ಕ್ಲಿನಿಕ್",
+    "voiceDoctor": "ವಾಯ್ಸ್ ಡಾಕ್ಟರ್",
+    "aiLanguages": "AI ಭಾಷೆಗಳು",
+    "iotVitals": "IoT ವೈಟಲ್ಸ್",
+    "emergency": "ತುರ್ತು ಅಪಾಯ",
+    "medicalOcr": "ವೈದ್ಯಕೀಯ OCR",
+    "diseasePrediction": "ರೋಗ ಮುನ್ಸೂಚನೆ",
+    "remoteDoctors": "ದೂರಸ್ಥ ವೈದ್ಯರು",
+    "offlineSync": "ಆಫ್‌ಲೈನ್ ಸಿಂಕ್",
+    "faq": "ಪದೇ ಪದೇ ಕೇಳಲಾಗುವ ಪ್ರಶ್ನೆಗಳು",
+    "launchClinic": "AI ಕ್ಲಿನಿಕ್ ತೆರೆಯಿರಿ",
+    "emergencySos": "AI ತುರ್ತು SOS",
+    "languages": "ಭಾಷೆಗಳು",
+    "switchLanguage": "ಭಾಷೆ ಬದಲಾಯಿಸಿ"
+  },
+  "hero": {
+    "badge": "AI-ಚಾಲಿತ ಗ್ರಾಮೀಣ ಆರೋಗ್ಯ ಸೇವಾ ವೇದಿಕೆ",
+    "title": "ಪ್ರತಿ ಹಳ್ಳಿಗೂ AI ವೈದ್ಯ",
+    "subtitle": "ತಕ್ಷಣದ ಬಹುಭಾಷಾ ವೈದ್ಯಕೀಯ ಸಹಾಯ — ಧ್ವನಿ, ಪಠ್ಯ ಮತ್ತು AI ರೋಗನಿರ್ಣಯ — 24/7 ಲಭ್ಯ.",
+    "startConsultation": "AI ಸಮಾಲೋಚನೆ ಪ್ರಾರಂಭಿಸಿ",
+    "emergencyHelp": "ತುರ್ತು ಸಹಾಯ",
+    "trustBadges": {
+      "available247": "24/7 ಲಭ್ಯ",
+      "multiLanguage": "ಬಹುಭಾಷಾ",
+      "emergencyReady": "ತುರ್ತಿಗೆ ಸಿದ್ಧ",
+      "aiPowered": "AI ಚಾಲಿತ"
+    }
+  },
+  "assistant": {
+    "greeting": "ನಮಸ್ಕಾರ! 🙏",
+    "subtitle": "ನಾನು ನಿಮ್ಮ AI ಆರೋಗ್ಯ ಸಹಾಯಕ. ಕನ್ನಡದಲ್ಲಿ ಪ್ರಶ್ನೆ ಕೇಳಿ.",
+    "placeholder": "ಆರೋಗ್ಯ ಪ್ರಶ್ನೆ ಟೈಪ್ ಮಾಡಿ ಅಥವಾ ಮಾತನಾಡಿ…",
+    "aiChat": "AI ಚಾಟ್",
+    "emergency": "ತುರ್ತು",
+    "listening": "ಆಲಿಸುತ್ತಿದ್ದೇನೆ…",
+    "active": "ಸಕ್ರಿಯ · ಬಹುಭಾಷಾ",
+    "firstAid": "AI ಪ್ರಥಮ ಚಿಕಿತ್ಸೆ"
+  },
+  "geo": {
+    "detecting": "ಸ್ಥಳ ಪತ್ತೆ ಮಾಡಲಾಗುತ್ತಿದೆ…",
+    "detected": "ಸ್ಥಳ ಪತ್ತೆಯಾಯಿತು",
+    "detectedLocation": "ಪತ್ತೆಯಾದ ಸ್ಥಳ",
+    "languageSwitchedTo": "ಭಾಷೆ ಬದಲಾಯಿಸಲಾಗಿದೆ",
+    "aiReadyIn": "AI ಸಹಾಯಕ ಸಿದ್ಧ",
+    "changeManually": "ಕೈಯಿಂದ ಭಾಷೆ ಬದಲಾಯಿಸಿ",
+    "continueIn": "ನಲ್ಲಿ ಮುಂದುವರಿಸಿ",
+    "couldNotDetect": "ಸ್ಥಳ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಪತ್ತೆ ಮಾಡಲಾಗಲಿಲ್ಲ.",
+    "tryAgain": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+    "healthSchemes": "ಆರೋಗ್ಯ ಯೋಜನೆಗಳು",
+    "notification": "ನಿಮ್ಮ ಸ್ಥಳದ ಆಧಾರದ ಮೇಲೆ ಭಾಷೆ ಬದಲಾಯಿಸಲಾಗಿದೆ."
+  },
+  "common": {
+    "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ…",
+    "close": "ಮುಚ್ಚಿ",
+    "change": "ಬದಲಾಯಿಸಿ",
+    "confirm": "ದೃಢಪಡಿಸಿ",
+    "cancel": "ರದ್ದುಮಾಡಿ",
+    "submit": "ಸಲ್ಲಿಸಿ",
+    "book": "ಅಪಾಯಿಂಟ್‌ಮೆಂಟ್ ಬುಕ್ ಮಾಡಿ",
+    "call": "ಕರೆ ಮಾಡಿ",
+    "readMore": "ಇನ್ನಷ್ಟು ಓದಿ"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "హోమ్",
+    "aiClinic": "AI వర్చువల్ క్లినిక్",
+    "voiceDoctor": "వాయిస్ డాక్టర్",
+    "aiLanguages": "AI భాషలు",
+    "iotVitals": "IoT వైటల్స్",
+    "emergency": "అత్యవసర ప్రమాదం",
+    "medicalOcr": "వైద్య OCR",
+    "diseasePrediction": "వ్యాధి అంచనా",
+    "remoteDoctors": "రిమోట్ డాక్టర్లు",
+    "offlineSync": "ఆఫ్‌లైన్ సమకాలీకరణ",
+    "faq": "తరచుగా అడిగే ప్రశ్నలు",
+    "launchClinic": "AI క్లినిక్ తెరవండి",
+    "emergencySos": "AI అత్యవసర SOS",
+    "languages": "భాషలు",
+    "switchLanguage": "భాష మార్చండి"
+  },
+  "hero": {
+    "badge": "AI-ఆధారిత గ్రామీణ ఆరోగ్య సేవా వేదిక",
+    "title": "ప్రతి గ్రామానికీ AI డాక్టర్",
+    "subtitle": "తక్షణ బహుభాషా వైద్య సహాయం — వాయిస్, టెక్స్ట్ మరియు AI నిర్ధారణ — 24/7 అందుబాటులో.",
+    "startConsultation": "AI సంప్రదింపు ప్రారంభించండి",
+    "emergencyHelp": "అత్యవసర సహాయం",
+    "trustBadges": {
+      "available247": "24/7 అందుబాటు",
+      "multiLanguage": "బహుభాషా",
+      "emergencyReady": "అత్యవసరానికి సిద్ధం",
+      "aiPowered": "AI ఆధారిత"
+    }
+  },
+  "assistant": {
+    "greeting": "నమస్కారం! 🙏",
+    "subtitle": "నేను మీ AI ఆరోగ్య సహాయకుడిని. తెలుగులో ప్రశ్న అడగండి.",
+    "placeholder": "ఆరోగ్య ప్రశ్నను టైప్ చేయండి లేదా మాట్లాడండి…",
+    "aiChat": "AI చాట్",
+    "emergency": "అత్యవసరం",
+    "listening": "వింటున్నాను…",
+    "active": "సక్రియం · బహుభాషా",
+    "firstAid": "AI ప్రథమ చికిత్స"
+  },
+  "geo": {
+    "detecting": "స్థానం గుర్తింపబడుతోంది…",
+    "detected": "స్థానం గుర్తించబడింది",
+    "detectedLocation": "గుర్తించిన స్థానం",
+    "languageSwitchedTo": "భాష మార్చబడింది",
+    "aiReadyIn": "AI సహాయకుడు సిద్ధంగా ఉన్నాడు",
+    "changeManually": "స్వయంగా భాష మార్చండి",
+    "continueIn": "లో కొనసాగించండి",
+    "couldNotDetect": "స్థానం స్వయంచాలకంగా గుర్తించబడలేదు.",
+    "tryAgain": "మళ్ళీ ప్రయత్నించండి",
+    "healthSchemes": "ఆరోగ్య పథకాలు",
+    "notification": "మీ స్థానం ఆధారంగా భాష మార్చబడింది."
+  },
+  "common": {
+    "loading": "లోడ్ అవుతోంది…",
+    "close": "మూసివేయండి",
+    "change": "మార్చండి",
+    "confirm": "నిర్ధారించండి",
+    "cancel": "రద్దు చేయండి",
+    "submit": "సమర్పించండి",
+    "book": "అపాయింట్‌మెంట్ బుక్ చేయండి",
+    "call": "కాల్ చేయండి",
+    "readMore": "మరింత చదవండి"
+  }
+}

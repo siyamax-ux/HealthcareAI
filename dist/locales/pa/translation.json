@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "ਮੁੱਖ ਪੰਨਾ",
+    "aiClinic": "AI ਵਰਚੁਅਲ ਕਲੀਨਿਕ",
+    "voiceDoctor": "ਵੌਇਸ ਡਾਕਟਰ",
+    "aiLanguages": "AI ਭਾਸ਼ਾਵਾਂ",
+    "iotVitals": "IoT ਵਾਈਟਲਜ਼",
+    "emergency": "ਐਮਰਜੈਂਸੀ ਜੋਖਮ",
+    "medicalOcr": "ਮੈਡੀਕਲ OCR",
+    "diseasePrediction": "ਬਿਮਾਰੀ ਭਵਿੱਖਬਾਣੀ",
+    "remoteDoctors": "ਰਿਮੋਟ ਡਾਕਟਰ",
+    "offlineSync": "ਔਫਲਾਈਨ ਸਿੰਕ",
+    "faq": "ਆਮ ਸਵਾਲ",
+    "launchClinic": "AI ਕਲੀਨਿਕ ਖੋਲ੍ਹੋ",
+    "emergencySos": "AI ਐਮਰਜੈਂਸੀ SOS",
+    "languages": "ਭਾਸ਼ਾਵਾਂ",
+    "switchLanguage": "ਭਾਸ਼ਾ ਬਦਲੋ"
+  },
+  "hero": {
+    "badge": "AI-ਸੰਚਾਲਿਤ ਪੇਂਡੂ ਸਿਹਤ ਸੇਵਾ ਪਲੇਟਫਾਰਮ",
+    "title": "ਹਰ ਪਿੰਡ ਲਈ AI ਡਾਕਟਰ",
+    "subtitle": "ਤੁਰੰਤ ਬਹੁਭਾਸ਼ੀ ਡਾਕਟਰੀ ਸਹਾਇਤਾ — ਆਵਾਜ਼, ਟੈਕਸਟ ਅਤੇ AI ਨਿਦਾਨ — 24/7 ਉਪਲਬਧ।",
+    "startConsultation": "AI ਸਲਾਹ ਸ਼ੁਰੂ ਕਰੋ",
+    "emergencyHelp": "ਐਮਰਜੈਂਸੀ ਮਦਦ",
+    "trustBadges": {
+      "available247": "24/7 ਉਪਲਬਧ",
+      "multiLanguage": "ਬਹੁਭਾਸ਼ੀ",
+      "emergencyReady": "ਐਮਰਜੈਂਸੀ ਤਿਆਰ",
+      "aiPowered": "AI ਸੰਚਾਲਿਤ"
+    }
+  },
+  "assistant": {
+    "greeting": "ਸਤ ਸ੍ਰੀ ਅਕਾਲ! 🙏",
+    "subtitle": "ਮੈਂ ਤੁਹਾਡਾ AI ਸਿਹਤ ਸਹਾਇਕ ਹਾਂ। ਆਪਣਾ ਸਿਹਤ ਸਵਾਲ ਪੁੱਛੋ।",
+    "placeholder": "ਆਪਣਾ ਸਿਹਤ ਸਵਾਲ ਟਾਈਪ ਕਰੋ ਜਾਂ ਬੋਲੋ…",
+    "aiChat": "AI ਚੈਟ",
+    "emergency": "ਐਮਰਜੈਂਸੀ",
+    "listening": "ਸੁਣ ਰਿਹਾ ਹਾਂ…",
+    "active": "ਸਰਗਰਮ · ਬਹੁਭਾਸ਼ੀ",
+    "firstAid": "AI ਪਹਿਲੀ ਸਹਾਇਤਾ"
+  },
+  "geo": {
+    "detecting": "ਟਿਕਾਣਾ ਪਛਾਣਿਆ ਜਾ ਰਿਹਾ ਹੈ…",
+    "detected": "ਟਿਕਾਣਾ ਮਿਲਿਆ",
+    "detectedLocation": "ਪਛਾਣਿਆ ਗਿਆ ਟਿਕਾਣਾ",
+    "languageSwitchedTo": "ਭਾਸ਼ਾ ਬਦਲੀ",
+    "aiReadyIn": "AI ਸਹਾਇਕ ਤਿਆਰ ਹੈ",
+    "changeManually": "ਖੁਦ ਭਾਸ਼ਾ ਬਦਲੋ",
+    "continueIn": "ਵਿੱਚ ਜਾਰੀ ਰੱਖੋ",
+    "couldNotDetect": "ਟਿਕਾਣਾ ਆਪਣੇ ਆਪ ਨਹੀਂ ਮਿਲਿਆ।",
+    "tryAgain": "ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
+    "healthSchemes": "ਸਿਹਤ ਯੋਜਨਾਵਾਂ",
+    "notification": "ਤੁਹਾਡੇ ਟਿਕਾਣੇ ਦੇ ਆਧਾਰ 'ਤੇ ਭਾਸ਼ਾ ਬਦਲੀ ਗਈ।"
+  },
+  "common": {
+    "loading": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…",
+    "close": "ਬੰਦ ਕਰੋ",
+    "change": "ਬਦਲੋ",
+    "confirm": "ਪੁਸ਼ਟੀ ਕਰੋ",
+    "cancel": "ਰੱਦ ਕਰੋ",
+    "submit": "ਜਮ੍ਹਾਂ ਕਰੋ",
+    "book": "ਅਪੌਇੰਟਮੈਂਟ ਬੁੱਕ ਕਰੋ",
+    "call": "ਕਾਲ ਕਰੋ",
+    "readMore": "ਹੋਰ ਪੜ੍ਹੋ"
+  }
+}

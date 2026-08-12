@@ -24,7 +24,7 @@ export const mockData = {
       languages: ["Hindi", "English", "Bhojpuri"],
       availability: "Available Now",
       status: "online",
-      image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400"
+      image: "https://randomuser.me/api/portraits/men/75.jpg"
     },
     {
       id: 2,
@@ -35,7 +35,7 @@ export const mockData = {
       languages: ["Hindi", "Gujarati", "English"],
       availability: "In 15 Mins",
       status: "busy",
-      image: "https://images.unsplash.com/photo-1594824813566-88855ce78961?auto=format&fit=crop&q=80&w=400"
+      image: "https://randomuser.me/api/portraits/women/44.jpg"
     },
     {
       id: 3,
@@ -46,17 +46,39 @@ export const mockData = {
       languages: ["Hindi", "Punjabi", "English"],
       availability: "Available Today",
       status: "online",
-      image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=400"
+      image: "https://randomuser.me/api/portraits/men/32.jpg"
     }
   ],
 
   diseaseForecast: [
-    { month: 'Jan', dengue: 24, malaria: 18, viral: 65, riskLevel: 'Low' },
-    { month: 'Feb', dengue: 18, malaria: 12, viral: 50, riskLevel: 'Low' },
-    { month: 'Mar', dengue: 35, malaria: 28, viral: 72, riskLevel: 'Moderate' },
-    { month: 'Apr', dengue: 50, malaria: 45, viral: 85, riskLevel: 'Moderate' },
-    { month: 'May', dengue: 95, malaria: 88, viral: 120, riskLevel: 'High' },
-    { month: 'Jun', dengue: 140, malaria: 130, viral: 160, riskLevel: 'Critical Outbreak' },
+    { month: 'Jan', dengue: 24,  malaria: 18,  viral: 65,  cholera: 8,   riskLevel: 'Low',              alert: false },
+    { month: 'Feb', dengue: 18,  malaria: 12,  viral: 50,  cholera: 6,   riskLevel: 'Low',              alert: false },
+    { month: 'Mar', dengue: 35,  malaria: 28,  viral: 72,  cholera: 12,  riskLevel: 'Moderate',         alert: false },
+    { month: 'Apr', dengue: 50,  malaria: 45,  viral: 85,  cholera: 18,  riskLevel: 'Moderate',         alert: false },
+    { month: 'May', dengue: 95,  malaria: 88,  viral: 120, cholera: 30,  riskLevel: 'High',             alert: true  },
+    { month: 'Jun', dengue: 140, malaria: 130, viral: 160, cholera: 55,  riskLevel: 'Critical Outbreak',alert: true  },
+    { month: 'Jul', dengue: 188, malaria: 175, viral: 195, cholera: 78,  riskLevel: 'Critical Outbreak',alert: true  },
+    { month: 'Aug', dengue: 210, malaria: 195, viral: 220, cholera: 92,  riskLevel: 'Critical Outbreak',alert: true  },
+    { month: 'Sep', dengue: 175, malaria: 160, viral: 185, cholera: 70,  riskLevel: 'Critical Outbreak',alert: true  },
+    { month: 'Oct', dengue: 110, malaria: 95,  viral: 130, cholera: 38,  riskLevel: 'High',             alert: true  },
+    { month: 'Nov', dengue: 55,  malaria: 42,  viral: 90,  cholera: 18,  riskLevel: 'Moderate',         alert: false },
+    { month: 'Dec', dengue: 30,  malaria: 24,  viral: 70,  cholera: 10,  riskLevel: 'Low',              alert: false },
+  ],
+
+  /* Year-over-year actuals (2025) vs AI forecast (2026) for comparison */
+  forecastComparison: [
+    { month: 'Jan', actual2025: 28,  forecast2026: 24  },
+    { month: 'Feb', actual2025: 22,  forecast2026: 18  },
+    { month: 'Mar', actual2025: 40,  forecast2026: 35  },
+    { month: 'Apr', actual2025: 58,  forecast2026: 50  },
+    { month: 'May', actual2025: 105, forecast2026: 95  },
+    { month: 'Jun', actual2025: 155, forecast2026: 140 },
+    { month: 'Jul', actual2025: 200, forecast2026: 188 },
+    { month: 'Aug', actual2025: 228, forecast2026: 210 },
+    { month: 'Sep', actual2025: 190, forecast2026: 175 },
+    { month: 'Oct', actual2025: 120, forecast2026: 110 },
+    { month: 'Nov', actual2025: 65,  forecast2026: 55  },
+    { month: 'Dec', actual2025: 35,  forecast2026: 30  },
   ],
 
   familyMembers: [

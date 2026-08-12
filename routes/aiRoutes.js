@@ -13,13 +13,8 @@ router.post(
 );
 
 // Instant deterministic risk-only check (no AI call, no DB write)
-// Useful for real-time frontend feedback while a health worker fills in vitals
-router.post(
-  "/risk",
-  protect,
-  authorize("doctor", "health_worker", "admin"),
-  riskCheck
-);
+// Public — no token required. This is a pure calculation with no sensitive data.
+router.post("/risk", riskCheck);
 
 // Get list of supported languages
 router.get(

@@ -1,0 +1,96 @@
+{
+  "nav": {
+    "home": "Home",
+    "aiClinic": "AI Virtual Clinic",
+    "voiceDoctor": "Voice Doctor",
+    "languages": "AI Languages",
+    "iotVitals": "IoT Vitals",
+    "emergency": "Emergency Risk",
+    "ocr": "Medical OCR",
+    "disease": "Disease Prediction",
+    "doctors": "Remote Doctors",
+    "offline": "Offline Sync",
+    "faq": "FAQ",
+    "launchClinic": "Launch AI Clinic",
+    "emergencySOS": "AI Emergency SOS",
+    "langSwitcher": "Language"
+  },
+  "hero": {
+    "badge": "AI-Powered Rural Healthcare",
+    "title": "Your Village's AI Doctor",
+    "subtitle": "is Always Available",
+    "description": "Speak in your language. Get instant medical guidance, emergency help, and connect with real doctors — all powered by AI trained for rural India.",
+    "startConsultation": "Start Voice Consultation",
+    "learnMore": "Learn More",
+    "stats": {
+      "villages": "Villages Covered",
+      "languages": "Languages",
+      "doctors": "Doctors Online",
+      "accuracy": "AI Accuracy"
+    }
+  },
+  "langDetect": {
+    "detected": "Language detected based on your location",
+    "changed": "Language changed based on your location",
+    "manual": "Language changed manually",
+    "continue": "Continue in",
+    "change": "Change Language",
+    "detecting": "Detecting your location…",
+    "failed": "Could not detect location automatically.",
+    "tryAgain": "Try again",
+    "locationDetected": "Location Detected",
+    "languageSwitchedTo": "Language Switched To",
+    "aiReadyIn": "AI Assistant Ready In"
+  },
+  "assistant": {
+    "title": "GramSwasthya AI",
+    "active": "Active · Multilingual",
+    "chat": "AI Chat",
+    "emergency": "Emergency",
+    "placeholder": "Type or speak your health query…",
+    "listening": "Listening…",
+    "greeting": "Hello! 👋",
+    "subtitle": "I'm your AI Health Assistant. Ask your health question in English.",
+    "welcome": "Welcome! We are here to serve your healthcare needs."
+  },
+  "emergency": {
+    "dial": "Dial 108 for immediate help",
+    "ambulance": "Ambulance",
+    "police": "Police",
+    "fire": "Fire",
+    "women": "Women Helpline",
+    "heartAttack": "Heart Attack",
+    "snakeBite": "Snake Bite",
+    "burns": "Burns"
+  },
+  "common": {
+    "loading": "Loading…",
+    "close": "Close",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "send": "Send",
+    "back": "Back",
+    "next": "Next",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "filter": "Filter",
+    "reset": "Reset",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "health": {
+    "symptoms": "Symptoms",
+    "diagnosis": "Diagnosis",
+    "prescription": "Prescription",
+    "appointment": "Appointment",
+    "doctor": "Doctor",
+    "patient": "Patient",
+    "hospital": "Hospital",
+    "medicine": "Medicine",
+    "dosage": "Dosage",
+    "report": "Report"
+  }
+}

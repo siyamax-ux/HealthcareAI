@@ -1,21 +1,27 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const os = require("os");
 
 // ===============================
-// ENSURE uploads/ DIRECTORY EXISTS
+// STORAGE STRATEGY
+// On Vercel (and other serverless platforms) the project root is
+// read-only. The only writable location is /tmp (os.tmpdir()).
+// Locally we still write to uploads/ for ease of debugging.
 // ===============================
-const uploadDir = path.join(__dirname, "../uploads");
+const IS_SERVERLESS = !!(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
 
-if (!fs.existsSync(uploadDir)) {
+const uploadDir = IS_SERVERLESS
+  ? os.tmpdir()                           // /tmp on Vercel
+  : path.join(__dirname, "../uploads");   // uploads/ locally
+
+if (!IS_SERVERLESS && !fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 // ===============================
 // DISK STORAGE CONFIGURATION
 // ===============================
-// Files are saved to the uploads/ folder.
-// The filename is timestamped to prevent collisions.
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);

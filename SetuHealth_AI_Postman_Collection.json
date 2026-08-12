@@ -1,0 +1,816 @@
+{
+  "info": {
+    "_postman_id": "c1f71df4-ecb4-4e2a-bb33-728b1bf0280c",
+    "name": "SetuHealth AI API",
+    "description": "API collection for SetuHealth AI. Set the `baseUrl` collection variable to point to your backend. The login requests automatically set the `token` collection variable on success.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ramsevak Kumar\",\n  \"email\": \"patient@demo.com\",\n  \"phone\": \"+91 98765 43210\",\n  \"password\": \"demo1234\",\n  \"role\": \"patient\",\n  \"village\": \"Sonbhadra, UP\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Create a new user profile with patient, doctor, or health_worker role."
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.success && res.token) {",
+                  "    pm.collectionVariables.set(\"token\", res.token);",
+                  "    console.log(\"Token saved successfully!\");",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"worker@demo.com\",\n  \"password\": \"demo1234\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Logs in the user and automatically saves the auth Bearer token to the collection variables for future requests."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile (Me)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            },
+            "description": "Gets current user details from JWT token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Patients",
+      "item": [
+        {
+          "name": "Create Patient",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sita Devi\",\n  \"age\": 38,\n  \"gender\": \"Female\",\n  \"village\": \"Bhojpur, Bihar\",\n  \"phone\": \"+91 99887 76655\",\n  \"emergencyContact\": \"+91 99887 76600\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "patients"
+              ]
+            },
+            "description": "Registers a new patient under a health worker's scope."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Patients",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "patients"
+              ]
+            },
+            "description": "Retrieve list of all patients."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Patient",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}"
+              ]
+            },
+            "description": "Fetch details of a single patient using their ID (Set the `patientId` variable first)."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"age\": 39,\n  \"village\": \"Bhojpur North, Bihar\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}"
+              ]
+            },
+            "description": "Update specific fields of a patient profile."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Patient",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "patients",
+                "{{patientId}}"
+              ]
+            },
+            "description": "Remove patient from the database."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. Consultations",
+      "item": [
+        {
+          "name": "Create Consultation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientId\": \"{{patientId}}\",\n  \"symptoms\": [\"fever\", \"cough\", \"chest congestion\"],\n  \"vitals\": {\n    \"temperature\": 38.9,\n    \"bloodPressure\": \"120/80\",\n    \"heartRate\": 85,\n    \"oxygenLevel\": 94,\n    \"weight\": 62\n  },\n  \"medicalNotes\": \"Experiencing mild difficulty breathing during heavy physical activity.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/consultations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "consultations"
+              ]
+            },
+            "description": "Log a new clinical consultation record (Set `patientId` variable first)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Consultations",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/consultations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "consultations"
+              ]
+            },
+            "description": "Fetch list of all consultations logged in the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Consultation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/consultations/{{consultationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "consultations",
+                "{{consultationId}}"
+              ]
+            },
+            "description": "Fetch details of a single consultation (Set `consultationId` variable first)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4. AI Analysis",
+      "item": [
+        {
+          "name": "Run Full AI Analysis",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"consultationId\": \"{{consultationId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ai/analyze",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ai",
+                "analyze"
+              ]
+            },
+            "description": "Triggers Gemini AI models to analyze consultation symptoms/vitals and enrich with clinical recommendations."
+          },
+          "response": []
+        },
+        {
+          "name": "Direct Risk Check (Public)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"symptoms\": [\"shortness of breath\", \"high fever\"],\n  \"vitals\": {\n    \"temperature\": 39.5,\n    \"oxygenLevel\": 90\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ai/risk",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ai",
+                "risk"
+              ]
+            },
+            "description": "Direct risk assessment using deterministic local logic. Does not call external Gemini APIs or save to database."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "5. OCR Documents",
+      "item": [
+        {
+          "name": "Upload Document",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "document",
+                  "type": "file",
+                  "src": [],
+                  "description": "Choose prescription, lab test, or medical report image/pdf"
+                },
+                {
+                  "key": "patientId",
+                  "value": "{{patientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "documentType",
+                  "value": "prescription",
+                  "type": "text"
+                },
+                {
+                  "key": "notes",
+                  "value": "Seeded lab report",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/documents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "documents"
+              ]
+            },
+            "description": "Upload a scanned document or prescription image for a patient."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Patient Documents",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/documents/patient/{{patientId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "documents",
+                "patient",
+                "{{patientId}}"
+              ]
+            },
+            "description": "Get lists of all documents uploaded for a specific patient."
+          },
+          "response": []
+        },
+        {
+          "name": "Trigger OCR Extraction",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documentId\": \"{{documentId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ocr/extract",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ocr",
+                "extract"
+              ]
+            },
+            "description": "Trigger Tesseract OCR to run on the uploaded file and output clinical text details."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "6. Emergency",
+      "item": [
+        {
+          "name": "Flag Emergency Alert",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"consultationId\": \"{{consultationId}}\",\n  \"reason\": \"Vitals show severe shock and oxygen level below 85%\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emergency/flag",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emergency",
+                "flag"
+              ]
+            },
+            "description": "Triggers emergency workflow, sending alerts for immediate doctor consultation."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Active Emergency Alerts",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/emergency/alerts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emergency",
+                "alerts"
+              ]
+            },
+            "description": "Fetch details of all flagged emergencies."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "7. Doctors & Appointments",
+      "item": [
+        {
+          "name": "Get All Doctors",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/doctors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "doctors"
+              ]
+            },
+            "description": "List all doctors registered in the system."
+          },
+          "response": []
+        },
+        {
+          "name": "Schedule Appointment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientId\": \"{{patientId}}\",\n  \"doctorId\": \"{{doctorId}}\",\n  \"date\": \"2026-08-20\",\n  \"time\": \"14:30\",\n  \"reason\": \"High-risk referral from health worker\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/doctors/appointments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "doctors",
+                "appointments"
+              ]
+            },
+            "description": "Book a clinical consultation appointment slot."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "8. Analytics",
+      "item": [
+        {
+          "name": "Get Dashboard Summary",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/summary",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "summary"
+              ]
+            },
+            "description": "Get summary count statistics for the dashboard view."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Risk Distributions",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/risk",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "risk"
+              ]
+            },
+            "description": "Risk engine statistics report."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://10.241.141.28:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "patientId",
+      "value": "651a2b3c4d5e6f7a8b9c0d1e",
+      "type": "string"
+    },
+    {
+      "key": "consultationId",
+      "value": "651a2b3c4d5e6f7a8b9c0d2f",
+      "type": "string"
+    },
+    {
+      "key": "documentId",
+      "value": "651a2b3c4d5e6f7a8b9c0d3a",
+      "type": "string"
+    },
+    {
+      "key": "doctorId",
+      "value": "651a2b3c4d5e6f7a8b9c0d4b",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "aiClinic": "KI-Virtuelle Klinik",
+    "voiceDoctor": "Stimmarzt",
+    "aiLanguages": "KI-Sprachen",
+    "iotVitals": "IoT-Vitalzeichen",
+    "emergency": "Notfallrisiko",
+    "medicalOcr": "Medizinisches OCR",
+    "diseasePrediction": "Krankheitsvorhersage",
+    "remoteDoctors": "Fernärzte",
+    "offlineSync": "Offline-Synchronisation",
+    "faq": "Häufig gestellte Fragen",
+    "launchClinic": "KI-Klinik starten",
+    "emergencySos": "KI-Notfall SOS",
+    "languages": "Sprachen",
+    "switchLanguage": "Sprache wechseln"
+  },
+  "hero": {
+    "badge": "KI-gestützte Gesundheitsplattform für ländliche Gebiete",
+    "title": "Ein KI-Arzt für jedes Dorf",
+    "subtitle": "Sofortige mehrsprachige medizinische Unterstützung — Sprache, Text und KI-Diagnose — rund um die Uhr verfügbar.",
+    "startConsultation": "KI-Beratung starten",
+    "emergencyHelp": "Notfallhilfe",
+    "trustBadges": {
+      "available247": "24/7 verfügbar",
+      "multiLanguage": "Mehrsprachig",
+      "emergencyReady": "Notfallbereit",
+      "aiPowered": "KI-gestützt"
+    }
+  },
+  "assistant": {
+    "greeting": "Hallo! 👋",
+    "subtitle": "Ich bin Ihr KI-Gesundheitsassistent. Stellen Sie Ihre Frage auf Deutsch.",
+    "placeholder": "Gesundheitsfrage eingeben oder sprechen…",
+    "aiChat": "KI-Chat",
+    "emergency": "Notfall",
+    "listening": "Höre zu…",
+    "active": "Aktiv · Mehrsprachig",
+    "firstAid": "KI-Erste Hilfe"
+  },
+  "geo": {
+    "detecting": "Standort wird erkannt…",
+    "detected": "Standort erkannt",
+    "detectedLocation": "Erkannter Standort",
+    "languageSwitchedTo": "Sprache gewechselt zu",
+    "aiReadyIn": "KI-Assistent bereit in",
+    "changeManually": "Sprache manuell wechseln",
+    "continueIn": "Weiter in",
+    "couldNotDetect": "Standort konnte nicht automatisch erkannt werden.",
+    "tryAgain": "Erneut versuchen",
+    "healthSchemes": "Gesundheitspläne",
+    "notification": "Sprache basierend auf Ihrem Standort geändert."
+  },
+  "common": {
+    "loading": "Wird geladen…",
+    "close": "Schließen",
+    "change": "Ändern",
+    "confirm": "Bestätigen",
+    "cancel": "Abbrechen",
+    "submit": "Absenden",
+    "book": "Termin buchen",
+    "call": "Anrufen",
+    "readMore": "Mehr lesen"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "होम",
+    "aiClinic": "AI वर्चुअल क्लीनिक",
+    "voiceDoctor": "वॉइस डॉक्टर",
+    "aiLanguages": "AI भाषाएँ",
+    "iotVitals": "IoT वाइटल्स",
+    "emergency": "आपातकालीन जोखिम",
+    "medicalOcr": "मेडिकल OCR",
+    "diseasePrediction": "रोग भविष्यवाणी",
+    "remoteDoctors": "दूरस्थ डॉक्टर",
+    "offlineSync": "ऑफ़लाइन सिंक",
+    "faq": "अक्सर पूछे जाने वाले सवाल",
+    "launchClinic": "AI क्लीनिक खोलें",
+    "emergencySos": "AI आपातकालीन SOS",
+    "languages": "भाषाएँ",
+    "switchLanguage": "भाषा बदलें"
+  },
+  "hero": {
+    "badge": "AI-संचालित ग्रामीण स्वास्थ्य सेवा मंच",
+    "title": "हर गाँव के लिए AI डॉक्टर",
+    "subtitle": "तत्काल बहुभाषी चिकित्सा सहायता — आवाज़, टेक्स्ट और AI निदान — ग्रामीण भारत के लिए 24/7 उपलब्ध।",
+    "startConsultation": "AI परामर्श शुरू करें",
+    "emergencyHelp": "आपातकालीन सहायता",
+    "trustBadges": {
+      "available247": "24/7 उपलब्ध",
+      "multiLanguage": "बहुभाषी",
+      "emergencyReady": "आपातकाल तैयार",
+      "aiPowered": "AI संचालित"
+    }
+  },
+  "assistant": {
+    "greeting": "नमस्ते! 🙏",
+    "subtitle": "मैं आपका AI स्वास्थ्य सहायक हूँ। अपना स्वास्थ्य प्रश्न हिंदी में पूछें।",
+    "placeholder": "अपना स्वास्थ्य प्रश्न टाइप या बोलें…",
+    "aiChat": "AI चैट",
+    "emergency": "आपातकाल",
+    "listening": "सुन रहा हूँ…",
+    "active": "सक्रिय · बहुभाषी",
+    "firstAid": "AI प्राथमिक चिकित्सा"
+  },
+  "geo": {
+    "detecting": "स्थान पहचाना जा रहा है…",
+    "detected": "स्थान पहचाना गया",
+    "detectedLocation": "पहचाना गया स्थान",
+    "languageSwitchedTo": "भाषा बदली गई",
+    "aiReadyIn": "AI सहायक तैयार है",
+    "changeManually": "मैन्युअल रूप से भाषा बदलें",
+    "continueIn": "में जारी रखें",
+    "couldNotDetect": "स्थान स्वचालित रूप से पहचाना नहीं जा सका।",
+    "tryAgain": "पुनः प्रयास करें",
+    "healthSchemes": "स्वास्थ्य योजनाएँ",
+    "notification": "आपके स्थान के आधार पर भाषा बदली गई।"
+  },
+  "common": {
+    "loading": "लोड हो रहा है…",
+    "close": "बंद करें",
+    "change": "बदलें",
+    "confirm": "पुष्टि करें",
+    "cancel": "रद्द करें",
+    "submit": "जमा करें",
+    "book": "अपॉइंटमेंट बुक करें",
+    "call": "कॉल करें",
+    "readMore": "और पढ़ें"
+  }
+}

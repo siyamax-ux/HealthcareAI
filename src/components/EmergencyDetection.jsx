@@ -466,6 +466,252 @@ export const EmergencyDetection = () => {
   // References
   const timerRef = useRef(null);
   const speechRecognitionRef = useRef(null);
+  const localVideoRef = useRef(null);
+  const cameraVideoRef = useRef(null);
+  const cameraStreamRef = useRef(null);
+
+  const [localStream, setLocalStream] = useState(null);
+
+  // Camera & Image Upload States
+  const [emergencyImage, setEmergencyImage] = useState(null);
+  const [emergencyImagePreview, setEmergencyImagePreview] = useState(null);
+  const [emergencyImageSource, setEmergencyImageSource] = useState(null); // 'camera' | 'upload'
+  const [activeInputTab, setActiveInputTab] = useState('write'); // 'write' | 'voice' | 'camera' | 'upload'
+  const [cameraModalOpen, setCameraModalOpen] = useState(false);
+  const [cameraFacingMode, setCameraFacingMode] = useState('environment'); // Prioritize rear camera
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisStep, setAnalysisStep] = useState('');
+  const [validationError, setValidationError] = useState('');
+  const [capturedImageTemp, setCapturedImageTemp] = useState(null);
+
+  // Webcam auto-activation effect
+  useEffect(() => {
+    let streamInstance = null;
+    if (doctorConnected) {
+      navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        .then(stream => {
+          streamInstance = stream;
+          setLocalStream(stream);
+          // Wait briefly for elements to render
+          setTimeout(() => {
+            if (localVideoRef.current) {
+              localVideoRef.current.srcObject = stream;
+            }
+          }, 100);
+        })
+        .catch(err => {
+          console.error("Webcam access error:", err);
+        });
+    } else {
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        setLocalStream(null);
+      }
+    }
+    return () => {
+      if (streamInstance) {
+        streamInstance.getTracks().forEach(track => track.stop());
+      }
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [doctorConnected]);
+
+  // Clean up camera modal stream on unmount
+  useEffect(() => {
+    return () => {
+      if (cameraStreamRef.current) {
+        cameraStreamRef.current.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, []);
+
+  const startCamera = async (facing = cameraFacingMode) => {
+    setValidationError('');
+    setCapturedImageTemp(null);
+    try {
+      if (cameraStreamRef.current) {
+        cameraStreamRef.current.getTracks().forEach(track => track.stop());
+      }
+
+      const constraints = {
+        video: {
+          facingMode: facing,
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
+        audio: false
+      };
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      cameraStreamRef.current = stream;
+      if (cameraVideoRef.current) {
+        cameraVideoRef.current.srcObject = stream;
+      }
+    } catch (err) {
+      console.error("Camera access failed:", err);
+      setValidationError("Failed to access camera. Please check your browser permissions.");
+    }
+  };
+
+  const stopCamera = () => {
+    if (cameraStreamRef.current) {
+      cameraStreamRef.current.getTracks().forEach(track => track.stop());
+      cameraStreamRef.current = null;
+    }
+  };
+
+  const switchCamera = () => {
+    const nextFacing = cameraFacingMode === 'user' ? 'environment' : 'user';
+    setCameraFacingMode(nextFacing);
+    startCamera(nextFacing);
+  };
+
+  const capturePhoto = () => {
+    if (cameraVideoRef.current) {
+      const video = cameraVideoRef.current;
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+      const ctx = canvas.getContext('2d');
+      
+      if (cameraFacingMode === 'user') {
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+      }
+      
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const file = new File([blob], `emergency_capture_${Date.now()}.jpg`, { type: 'image/jpeg' });
+          const previewUrl = URL.createObjectURL(blob);
+          setCapturedImageTemp({ file, previewUrl });
+          stopCamera();
+        }
+      }, 'image/jpeg', 0.95);
+    }
+  };
+
+  const usePhoto = () => {
+    if (capturedImageTemp) {
+      if (emergencyImagePreview && emergencyImageSource === 'camera') {
+        URL.revokeObjectURL(emergencyImagePreview);
+      }
+      setEmergencyImage(capturedImageTemp.file);
+      setEmergencyImagePreview(capturedImageTemp.previewUrl);
+      setEmergencyImageSource('camera');
+      setValidationError('');
+    }
+    setCameraModalOpen(false);
+    setCapturedImageTemp(null);
+  };
+
+  const retakePhoto = () => {
+    setCapturedImageTemp(null);
+    startCamera(cameraFacingMode);
+  };
+
+  const cancelCamera = () => {
+    stopCamera();
+    setCameraModalOpen(false);
+    setCapturedImageTemp(null);
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    setValidationError('');
+    
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      setValidationError('Unsupported format. Please select a JPG, JPEG, PNG, or WEBP image.');
+      return;
+    }
+    
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      setValidationError('File is too large. Image size should be less than 5 MB.');
+      return;
+    }
+
+    if (emergencyImagePreview && emergencyImageSource === 'upload') {
+      URL.revokeObjectURL(emergencyImagePreview);
+    }
+
+    setEmergencyImage(file);
+    setEmergencyImagePreview(URL.createObjectURL(file));
+    setEmergencyImageSource('upload');
+  };
+
+  const removeImage = () => {
+    if (emergencyImagePreview) {
+      URL.revokeObjectURL(emergencyImagePreview);
+    }
+    setEmergencyImage(null);
+    setEmergencyImagePreview(null);
+    setEmergencyImageSource(null);
+    setValidationError('');
+  };
+
+  const handleAnalyze = async (e) => {
+    if (e) e.preventDefault();
+    
+    const hasText = searchQuery.trim().length > 0;
+    const hasImage = !!emergencyImage;
+    
+    if (!hasText && !hasImage) {
+      setValidationError("Please enter a description, record your voice, or provide an image of the emergency.");
+      return;
+    }
+    
+    setIsAnalyzing(true);
+    setValidationError('');
+    
+    try {
+      setAnalysisStep("Scanning input channels...");
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      if (hasImage) {
+        setAnalysisStep("Analyzing visual emergency markers...");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+      
+      setAnalysisStep("Correlating vitals with clinical guidelines...");
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      setAnalysisStep("Finalizing decision recommendations...");
+      await new Promise(resolve => setTimeout(resolve, 600));
+
+      setIsAnalyzing(false);
+      
+      let matchId = null;
+      if (hasText) {
+        const query = searchQuery.toLowerCase().trim();
+        for (const item of KEYWORD_MAP) {
+          if (item.keywords.some(kw => query.includes(kw)) || query.includes(item.target)) {
+            matchId = item.target;
+            break;
+          }
+        }
+      }
+      
+      if (!matchId) {
+        const fallbackScenarios = ['cardiac-arrest', 'snake-bite', 'burns', 'fracture', 'breathing-difficulties'];
+        matchId = fallbackScenarios[Math.floor(Math.random() * fallbackScenarios.length)];
+      }
+
+      if (matchId && EMERGENCY_DATABASE[matchId]) {
+        triggerEmergency(matchId);
+      }
+      
+    } catch (err) {
+      console.error(err);
+      setValidationError("An error occurred during AI analysis. Please try again.");
+      setIsAnalyzing(false);
+    }
+  };
 
   // Normal vitals simulation selector (from the original Triage Simulator)
   const [selectedPreset, setSelectedPreset] = useState('critical');
@@ -1088,15 +1334,42 @@ export const EmergencyDetection = () => {
                             <span>CONNECTED - Dr. Ramesh Kumar (MD, Emergency Med)</span>
                           </div>
                           
-                          {/* Mock Doctor Video Stream */}
-                          <div className="w-full h-32 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center relative overflow-hidden">
-                            <div className="absolute top-2 left-2 px-2 py-0.5 rounded text-[8px] bg-red-600 font-bold text-white font-mono uppercase">
-                              Doctor Live Feed
+                          {/* Split-Screen Video Feed */}
+                          <div className="grid grid-cols-2 gap-3 w-full">
+                            {/* Doctor Live Feed */}
+                            <div className="h-32 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center relative overflow-hidden shadow-inner">
+                              <div className="absolute top-2 left-2 z-10 px-1.5 py-0.5 rounded text-[8px] bg-red-600 font-bold text-white font-mono uppercase tracking-wider">
+                                Doctor Live
+                              </div>
+                              <div className="absolute inset-0 bg-gradient-to-t from-cyan-950/40 to-transparent pointer-events-none" />
+                              <span className="text-slate-400 text-[10px] flex flex-col items-center gap-1.5 text-center px-2">
+                                <Stethoscope className="w-6 h-6 text-cyan-400 animate-pulse" />
+                                <span className="font-semibold text-cyan-300">Dr. Ramesh Kumar</span>
+                                <span className="text-[8px] text-slate-500 font-mono">Stream: Encrypted</span>
+                              </span>
                             </div>
-                            <span className="text-slate-500 text-xs flex flex-col items-center gap-1.5">
-                              <Stethoscope className="w-8 h-8 text-cyan-400 animate-bounce" />
-                              <span>AI-Linked Doctor on standby...</span>
-                            </span>
+
+                            {/* Patient Local Webcam Feed */}
+                            <div className="h-32 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center relative overflow-hidden shadow-inner">
+                              <div className="absolute top-2 left-2 z-10 px-1.5 py-0.5 rounded text-[8px] bg-cyan-600 font-bold text-white font-mono uppercase tracking-wider">
+                                Patient (You)
+                              </div>
+                              {localStream ? (
+                                <video
+                                  ref={localVideoRef}
+                                  autoPlay
+                                  playsInline
+                                  muted
+                                  className="w-full h-full object-cover transform -scale-x-100"
+                                />
+                              ) : (
+                                <span className="text-slate-500 text-[9px] flex flex-col items-center gap-1 text-center px-2">
+                                  <Video className="w-5 h-5 text-rose-500 animate-pulse" />
+                                  <span>Starting camera...</span>
+                                  <span className="text-[7px] text-slate-600">Requesting local feed</span>
+                                </span>
+                              )}
+                            </div>
                           </div>
 
                           <button
@@ -1130,61 +1403,208 @@ export const EmergencyDetection = () => {
              ======================================================== */
           <div className="space-y-12 animate-in fade-in duration-500">
 
-            {/* Smart Emergency Input (Voice & Search) */}
+            {/* Unified Emergency Input Console */}
             <div className="max-w-4xl mx-auto p-6 rounded-3xl glass-card border border-slate-800/80 bg-slate-900/20 backdrop-blur-lg relative">
               <div className="absolute -top-3 -right-3 w-10 h-10 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 shadow-md animate-pulse">
                 <Sparkles className="w-5 h-5" />
               </div>
 
-              <div className="space-y-4">
-                <label className="text-xs font-extrabold text-rose-400 uppercase tracking-widest block">AI EMERGENCY DECISION ENGINE</label>
-                <h3 className="text-lg font-bold text-white">Describe the emergency situation below:</h3>
-                
-                <form onSubmit={handleSearchSubmit} className="relative flex items-center gap-2">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                    <input 
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Describe symptoms (e.g. 'chest pain and feeling weak' or 'my cousin was bitten by a snake')..."
-                      className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-950/80 border border-slate-800 focus:border-rose-500/50 text-slate-100 placeholder-slate-500 focus:outline-none transition-all text-sm sm:text-base"
-                    />
+              <div className="space-y-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                  <div>
+                    <label className="text-[10px] font-extrabold text-rose-400 uppercase tracking-widest block mb-1">AI EMERGENCY DECISION ENGINE</label>
+                    <h3 className="text-base font-bold text-white">Describe the emergency situation or upload/capture a visual:</h3>
                   </div>
-                  
-                  {/* Voice Activation Action */}
+                  {/* SOS helper label */}
+                  <span className="text-[10px] bg-red-500/10 border border-red-500/30 text-red-400 font-bold px-2.5 py-1 rounded-full animate-pulse">
+                    🚨 Life-Threatening? Call 108 / Press SOS
+                  </span>
+                </div>
+
+                {/* 4 Mode Buttons Grid (1 row on desktop, 2x2 grid on mobile) */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   <button
                     type="button"
-                    onClick={toggleListening}
-                    className={`p-4 rounded-2xl border transition-all ${
-                      isListening 
-                        ? 'bg-red-600 border-red-500 text-white animate-pulse'
-                        : 'bg-slate-950/80 border-slate-800 text-slate-400 hover:text-white'
+                    onClick={() => {
+                      setActiveInputTab('write');
+                      document.getElementById('emergency-text-input')?.focus();
+                    }}
+                    className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl border text-xs font-bold transition-all duration-200 ${
+                      activeInputTab === 'write'
+                        ? 'bg-rose-500/15 border-rose-500 text-rose-400'
+                        : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
                     }`}
-                    title="Voice Activation"
                   >
-                    {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                    <span>✍️ Write</span>
                   </button>
 
                   <button
-                    type="submit"
-                    className="px-6 py-4 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-sm rounded-2xl shadow-lg shadow-rose-600/30 transition-all flex items-center gap-2"
+                    type="button"
+                    onClick={() => {
+                      setActiveInputTab('voice');
+                      toggleListening();
+                    }}
+                    className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl border text-xs font-bold transition-all duration-200 ${
+                      isListening
+                        ? 'bg-red-600 border-red-500 text-white animate-pulse'
+                        : activeInputTab === 'voice'
+                        ? 'bg-rose-500/15 border-rose-500 text-rose-400'
+                        : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                    }`}
                   >
-                    <span>Assess</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <span>🎙️ Voice</span>
                   </button>
-                </form>
 
-                {/* Voice Status Messages */}
-                {isListening && (
-                  <p className="text-xs text-rose-400 font-medium animate-pulse flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-red-600 animate-ping" />
-                    <span>Listening... Say something like "Patient is not breathing" or "Heart attack emergency"</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCameraModalOpen(true);
+                      startCamera();
+                    }}
+                    className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-950/60 border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700 text-xs font-bold transition-all duration-200"
+                  >
+                    <span>📷 Camera</span>
+                  </button>
+
+                  <label className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-950/60 border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700 text-xs font-bold cursor-pointer transition-all duration-200">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                    <span>📁 Upload</span>
+                  </label>
+                </div>
+
+                {/* Input Fields Content */}
+                <div className="space-y-4">
+                  {/* Text Input Block */}
+                  <div className="relative">
+                    <textarea
+                      id="emergency-text-input"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Type details here (e.g. 'high fever with shivering', 'severe swelling on ankle after falling') or tap Mic to record..."
+                      rows={3}
+                      className="w-full pl-4 pr-12 py-3 rounded-2xl bg-slate-950/80 border border-slate-800 focus:border-rose-500/50 text-slate-100 placeholder-slate-600 focus:outline-none transition-all text-sm resize-none"
+                    />
+                    {isListening && (
+                      <span className="absolute right-4 bottom-4 flex h-3 w-3">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Voice recording indicators */}
+                  {isListening && (
+                    <div className="p-3.5 rounded-xl bg-red-950/20 border border-red-500/20 flex items-center justify-between gap-3 animate-pulse">
+                      <div className="flex items-center gap-2 text-xs text-red-400 font-bold">
+                        <Mic className="w-4 h-4 animate-bounce" />
+                        <span>ASHA Voice Assistant listening... speak clearly</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={toggleListening}
+                        className="px-2 py-1 bg-red-600 text-white rounded text-[10px] font-bold"
+                      >
+                        Stop Recording
+                      </button>
+                    </div>
+                  )}
+
+                  {voiceError && (
+                    <p className="text-xs text-amber-400 font-semibold">{voiceError}</p>
+                  )}
+
+                  {validationError && (
+                    <p className="text-xs text-rose-400 font-bold bg-rose-500/5 p-3 rounded-xl border border-rose-500/20">{validationError}</p>
+                  )}
+
+                  {/* Image Preview Block */}
+                  {emergencyImagePreview && (
+                    <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row items-center gap-4 justify-between">
+                      <div className="flex items-center gap-4 w-full">
+                        <div className="w-16 h-16 rounded-xl overflow-hidden border border-slate-700 bg-slate-900 shrink-0">
+                          <img
+                            src={emergencyImagePreview}
+                            alt="Emergency snapshot preview"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="text-left">
+                          <span className="text-xs font-bold text-white block truncate max-w-[200px] sm:max-w-[300px]">
+                            {emergencyImage ? emergencyImage.name : 'camera_capture.jpg'}
+                          </span>
+                          <span className="text-[10px] text-slate-500 font-mono block mt-0.5">
+                            Size: {emergencyImage ? (emergencyImage.size / 1024 / 1024).toFixed(2) + ' MB' : 'Captured Image'}
+                            {emergencyImageSource && ` • Source: ${emergencyImageSource}`}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        {emergencyImageSource === 'camera' ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCameraModalOpen(true);
+                              startCamera();
+                            }}
+                            className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-bold rounded-xl transition-all"
+                          >
+                            Retake
+                          </button>
+                        ) : (
+                          <label className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-bold rounded-xl cursor-pointer transition-all">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleFileUpload}
+                              className="hidden"
+                            />
+                            Replace
+                          </label>
+                        )}
+                        <button
+                          type="button"
+                          onClick={removeImage}
+                          className="px-3 py-1.5 bg-rose-500/10 border border-rose-500/30 text-rose-400 hover:bg-rose-600 hover:text-white text-xs font-bold rounded-xl transition-all"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Submit Action Block */}
+                <div className="pt-2 flex flex-col items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={handleAnalyze}
+                    disabled={isAnalyzing}
+                    className="w-full sm:w-auto px-12 py-3 bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-extrabold text-xs uppercase tracking-wider rounded-2xl shadow-xl shadow-rose-600/30 disabled:opacity-50 transition-all flex items-center justify-center gap-3"
+                  >
+                    {isAnalyzing ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <span>{analysisStep}</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Analyze Emergency</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+
+                  {/* Safety message */}
+                  <p className="text-[10px] text-slate-500 text-center leading-relaxed max-w-lg">
+                    ⚠️ <strong>Safety Notice:</strong> AI analysis is for assistance only and does not replace emergency medical care. For life-threatening situations, prominently direct towards SOS / emergency medical services.
                   </p>
-                )}
-                {voiceError && (
-                  <p className="text-xs text-amber-400 font-semibold">{voiceError}</p>
-                )}
+                </div>
 
                 {/* Preset Fast Actions */}
                 <div className="pt-2">
@@ -1461,6 +1881,103 @@ export const EmergencyDetection = () => {
           </p>
         </div>
 
+      {/* Camera Capture Modal */}
+      {cameraModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="w-full max-w-lg rounded-3xl bg-slate-900 border border-slate-800 p-6 flex flex-col gap-6 shadow-2xl relative overflow-hidden">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h4 className="text-sm font-extrabold text-white uppercase tracking-wider">📷 Emergency Camera</h4>
+              <button 
+                type="button"
+                onClick={cancelCamera}
+                className="text-xs text-slate-500 hover:text-white"
+              >
+                Close
+              </button>
+            </div>
+
+            {/* Video Viewport / Preview */}
+            <div className="w-full h-80 rounded-2xl bg-slate-950 border border-slate-800 relative overflow-hidden flex items-center justify-center">
+              {capturedImageTemp ? (
+                /* Capture Snapshot Frame */
+                <img
+                  src={capturedImageTemp.previewUrl}
+                  alt="Captured snapshot preview"
+                  className="w-full h-full object-cover transform -scale-x-100"
+                />
+              ) : (
+                /* Live Camera Feed */
+                <video
+                  ref={cameraVideoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className={`w-full h-full object-cover ${cameraFacingMode === 'user' ? 'transform -scale-x-100' : ''}`}
+                />
+              )}
+              
+              {/* Overlay guides */}
+              <div className="absolute inset-0 border border-cyan-500/20 rounded-2xl pointer-events-none" />
+              <div className="absolute inset-x-0 bottom-4 text-center">
+                <span className="inline-block px-2.5 py-1 rounded bg-slate-950/80 border border-slate-800 text-[10px] text-slate-400 font-medium">
+                  {capturedImageTemp ? 'Preview Snapshot' : `Camera Active (${cameraFacingMode === 'user' ? 'Front' : 'Rear'})`}
+                </span>
+              </div>
+            </div>
+
+            {/* Modal Footer Controls */}
+            <div className="flex flex-col sm:flex-row items-center gap-3 justify-end pt-2">
+              {capturedImageTemp ? (
+                /* Use / Retake buttons */
+                <>
+                  <button
+                    type="button"
+                    onClick={retakePhoto}
+                    className="w-full sm:w-auto px-6 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl transition-all"
+                  >
+                    Retake
+                  </button>
+                  <button
+                    type="button"
+                    onClick={usePhoto}
+                    className="w-full sm:w-auto px-6 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold rounded-xl transition-all"
+                  >
+                    Use Photo
+                  </button>
+                </>
+              ) : (
+                /* Capture / Switch / Cancel buttons */
+                <>
+                  <button
+                    type="button"
+                    onClick={cancelCamera}
+                    className="w-full sm:w-auto px-5 py-2.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-400 text-xs font-bold rounded-xl transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={switchCamera}
+                    className="w-full sm:w-auto px-5 py-2.5 bg-slate-800 hover:bg-slate-750 text-slate-200 text-xs font-bold rounded-xl transition-all"
+                  >
+                    Switch Camera
+                  </button>
+                  <button
+                    type="button"
+                    onClick={capturePhoto}
+                    className="w-full sm:w-auto px-8 py-2.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-rose-600/20 transition-all"
+                  >
+                    Capture Photo
+                  </button>
+                </>
+              )}
+            </div>
+            
+          </div>
+        </div>
+      )}
       </div>
     </section>
   );

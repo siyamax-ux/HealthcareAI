@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "ഹോം",
+    "aiClinic": "AI വെർച്വൽ ക്ലിനിക്",
+    "voiceDoctor": "വോയ്‌സ് ഡോക്ടർ",
+    "aiLanguages": "AI ഭാഷകൾ",
+    "iotVitals": "IoT വൈറ്റൽസ്",
+    "emergency": "അടിയന്തര അപകടം",
+    "medicalOcr": "മെഡിക്കൽ OCR",
+    "diseasePrediction": "രോഗ പ്രവചനം",
+    "remoteDoctors": "റിമോട്ട് ഡോക്ടർമാർ",
+    "offlineSync": "ഓഫ്‌ലൈൻ സമന്വയം",
+    "faq": "പതിവ് ചോദ്യങ്ങൾ",
+    "launchClinic": "AI ക്ലിനിക് തുറക്കൂ",
+    "emergencySos": "AI അടിയന്തര SOS",
+    "languages": "ഭാഷകൾ",
+    "switchLanguage": "ഭാഷ മാറ്റൂ"
+  },
+  "hero": {
+    "badge": "AI-ഇൻ‌ഡ്രൈവ്ഡ് ഗ്രാമീണ ആരോഗ്യ സേവന പ്ലാറ്റ്‌ഫോം",
+    "title": "എല്ലാ ഗ്രാമത്തിനും AI ഡോക്ടർ",
+    "subtitle": "ഉടനടി ബഹുഭാഷ വൈദ്യ സഹായം — ശബ്ദം, ടെക്‌സ്‌റ്റ്, AI നിർണ്ണയം — 24/7 ലഭ്യം.",
+    "startConsultation": "AI കൺസൾട്ടേഷൻ ആരംഭിക്കൂ",
+    "emergencyHelp": "അടിയന്തര സഹായം",
+    "trustBadges": {
+      "available247": "24/7 ലഭ്യം",
+      "multiLanguage": "ബഹുഭാഷ",
+      "emergencyReady": "അടിയന്തരത്തിന് തയ്യാർ",
+      "aiPowered": "AI ഇൻ‌ഡ്രൈവ്ഡ്"
+    }
+  },
+  "assistant": {
+    "greeting": "നമസ്‌തേ! 🙏",
+    "subtitle": "ഞാൻ നിങ്ങളുടെ AI ആരോഗ്യ സഹായിയാണ്. മലയാളത്തിൽ ചോദ്യം ചോദിക്കൂ.",
+    "placeholder": "ആരോഗ്യ ചോദ്യം ടൈപ്പ് ചെയ്യൂ അല്ലെങ്കിൽ പറഞ്ഞൂ…",
+    "aiChat": "AI ചാറ്റ്",
+    "emergency": "അടിയന്തരം",
+    "listening": "കേൾക്കുന്നു…",
+    "active": "സക്രിയം · ബഹുഭാഷ",
+    "firstAid": "AI പ്രഥമ ചികിത്സ"
+  },
+  "geo": {
+    "detecting": "സ്ഥാനം കണ്ടെത്തുന്നു…",
+    "detected": "സ്ഥാനം കണ്ടെത്തി",
+    "detectedLocation": "കണ്ടെത്തിയ സ്ഥാനം",
+    "languageSwitchedTo": "ഭാഷ മാറ്റി",
+    "aiReadyIn": "AI സഹായി തയ്യാർ",
+    "changeManually": "സ്വമേധയാ ഭാഷ മാറ്റൂ",
+    "continueIn": "ൽ തുടരൂ",
+    "couldNotDetect": "സ്ഥാനം സ്വയം കണ്ടെത്താൻ കഴിഞ്ഞില്ല.",
+    "tryAgain": "വീണ്ടും ശ്രമിക്കൂ",
+    "healthSchemes": "ആരോഗ്യ പദ്ധതികൾ",
+    "notification": "നിങ്ങളുടെ സ്ഥാനം അനുസരിച്ച് ഭാഷ മാറ്റി."
+  },
+  "common": {
+    "loading": "ലോഡ് ആകുന്നു…",
+    "close": "അടയ്ക്കൂ",
+    "change": "മാറ്റൂ",
+    "confirm": "സ്ഥിരീകരിക്കൂ",
+    "cancel": "റദ്ദ് ചെയ്യൂ",
+    "submit": "സമർപ്പിക്കൂ",
+    "book": "അപ്പോയ്ന്റ്മെന്റ് ബുക്ക് ചെയ്യൂ",
+    "call": "വിളിക്കൂ",
+    "readMore": "കൂടുതൽ വായിക്കൂ"
+  }
+}

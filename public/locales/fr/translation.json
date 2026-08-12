@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "aiClinic": "Clinique Virtuelle IA",
+    "voiceDoctor": "Médecin Vocal",
+    "aiLanguages": "Langues IA",
+    "iotVitals": "Signes Vitaux IoT",
+    "emergency": "Risque d'Urgence",
+    "medicalOcr": "OCR Médical",
+    "diseasePrediction": "Prédiction de Maladie",
+    "remoteDoctors": "Médecins à Distance",
+    "offlineSync": "Sync Hors Ligne",
+    "faq": "Questions Fréquentes",
+    "launchClinic": "Lancer la Clinique IA",
+    "emergencySos": "SOS Urgence IA",
+    "languages": "Langues",
+    "switchLanguage": "Changer de Langue"
+  },
+  "hero": {
+    "badge": "Plateforme de Santé Rurale Propulsée par IA",
+    "title": "Un Médecin IA pour Chaque Village",
+    "subtitle": "Assistance médicale multilingue instantanée — voix, texte et diagnostic IA — disponible 24h/24.",
+    "startConsultation": "Commencer la Consultation IA",
+    "emergencyHelp": "Aide d'Urgence",
+    "trustBadges": {
+      "available247": "Disponible 24/7",
+      "multiLanguage": "Multilingue",
+      "emergencyReady": "Prêt pour l'Urgence",
+      "aiPowered": "Propulsé par IA"
+    }
+  },
+  "assistant": {
+    "greeting": "Bonjour! 👋",
+    "subtitle": "Je suis votre assistant de santé IA. Posez votre question en français.",
+    "placeholder": "Tapez ou parlez votre question de santé…",
+    "aiChat": "Chat IA",
+    "emergency": "Urgence",
+    "listening": "J'écoute…",
+    "active": "Actif · Multilingue",
+    "firstAid": "Premiers Secours IA"
+  },
+  "geo": {
+    "detecting": "Détection de l'emplacement…",
+    "detected": "Emplacement détecté",
+    "detectedLocation": "Emplacement Détecté",
+    "languageSwitchedTo": "Langue Changée Vers",
+    "aiReadyIn": "Assistant IA Prêt En",
+    "changeManually": "Changer la Langue Manuellement",
+    "continueIn": "Continuer En",
+    "couldNotDetect": "Impossible de détecter l'emplacement automatiquement.",
+    "tryAgain": "Réessayer",
+    "healthSchemes": "Plans de Santé",
+    "notification": "Langue changée en fonction de votre emplacement."
+  },
+  "common": {
+    "loading": "Chargement…",
+    "close": "Fermer",
+    "change": "Changer",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "submit": "Soumettre",
+    "book": "Prendre Rendez-vous",
+    "call": "Appeler",
+    "readMore": "Lire Plus"
+  }
+}

@@ -1,70 +1,106 @@
 import React, { useState } from 'react';
-import { 
-  Bot, Stethoscope, FileSearch, ShieldAlert, Cpu, Heart, CheckCircle2, 
+import {
+  Bot, Stethoscope, FileSearch, ShieldAlert, Cpu, Heart, CheckCircle2,
   ArrowRight, AlertTriangle, Activity, Sparkles, RefreshCw, Zap
 } from 'lucide-react';
+import { aiApi } from '../api/api';
+
+// Maps API riskLevel string → UI colour tokens
+const RISK_STYLES = {
+  low: {
+    riskColor:  'border-emerald-500/50 bg-emerald-500/10 text-emerald-300',
+    badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+    label:      'Green (Mild Risk)',
+  },
+  medium: {
+    riskColor:  'border-amber-500/50 bg-amber-500/10 text-amber-300',
+    badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+    label:      'Yellow (Moderate Risk)',
+  },
+  high: {
+    riskColor:  'border-orange-500/50 bg-orange-500/10 text-orange-300',
+    badgeColor: 'bg-orange-500/20 text-orange-300 border-orange-500/40',
+    label:      'Orange (High Risk)',
+  },
+  critical: {
+    riskColor:  'border-rose-500/50 bg-rose-500/10 text-rose-300',
+    badgeColor: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
+    label:      'Red (Critical Emergency Risk)',
+  },
+};
+
+// Symptom → keywords sent to the risk engine
+const SYMPTOM_KEYWORDS = {
+  'High Fever & Chills (तेज़ बुखार)':                        ['high fever', 'chills'],
+  'Severe Joint Pain (जोड़ों में दर्द)':                    ['severe joint pain', 'pain'],
+  'Continuous Cough & Shortness of Breath (खांसी और सांस फूलना)': ['shortness of breath', 'cough', 'difficulty breathing'],
+  'Abdominal Pain & Vomiting (पेट दर्द)':                   ['abdominal pain', 'vomiting'],
+  'Dizziness & Low Blood Pressure (चक्कर आना)':              ['dizziness', 'weakness'],
+};
 
 export const VirtualClinic = () => {
   const [selectedSymptom, setSelectedSymptom] = useState('');
-  const [analyzing, setAnalyzing] = useState(false);
-  const [result, setResult] = useState(null);
+  const [analyzing, setAnalyzing]             = useState(false);
+  const [result, setResult]                   = useState(null);
 
-  const symptomList = [
-    "High Fever & Chills (तेज़ बुखार)",
-    "Severe Joint Pain (जोड़ों में दर्द)",
-    "Continuous Cough & Shortness of Breath (खांसी और सांस फूलना)",
-    "Abdominal Pain & Vomiting (पेट दर्द)",
-    "Dizziness & Low Blood Pressure (चक्कर आना)"
-  ];
+  const symptomList = Object.keys(SYMPTOM_KEYWORDS);
 
-  const handleAnalyze = (symptom) => {
+  const handleAnalyze = async (symptom) => {
     setSelectedSymptom(symptom);
     setAnalyzing(true);
     setResult(null);
 
-    setTimeout(() => {
+    const symptoms = SYMPTOM_KEYWORDS[symptom] || [symptom];
+
+    try {
+      // Call real risk engine on backend (no auth required for /api/ai/risk)
+      const data = await aiApi.riskCheck({}, symptoms);
+
+      const style = RISK_STYLES[data.riskLevel] || RISK_STYLES.low;
+
+      setResult({
+        riskLevel:       style.label,
+        riskColor:       style.riskColor,
+        badgeColor:      style.badgeColor,
+        summary:         data.summary || `Risk level: ${data.riskLevel}. Signals: ${(data.riskSignals || []).join(', ') || 'None detected.'}`,
+        recommendations: data.recommendedAction
+          ? [data.recommendedAction]
+          : ['Monitor patient closely', 'Consult a health worker if symptoms worsen'],
+        emergencyAction: data.doctorRequired
+          ? 'Doctor consultation required. Contact 108 if critical.'
+          : 'Standard tele-consultation recommended.',
+        riskSignals:     data.riskSignals || [],
+        doctorRequired:  data.doctorRequired,
+      });
+    } catch {
+      // API unreachable — fall back to local keyword logic so UI never breaks
+      const isHigh = symptoms.some(s => ['shortness of breath', 'difficulty breathing', 'dizziness'].includes(s));
+      const isMedium = symptoms.some(s => ['high fever', 'chills', 'pain'].includes(s));
+      const style = isHigh ? RISK_STYLES.critical : isMedium ? RISK_STYLES.medium : RISK_STYLES.low;
+
+      setResult({
+        riskLevel:       style.label,
+        riskColor:       style.riskColor,
+        badgeColor:      style.badgeColor,
+        summary:         isHigh
+          ? 'Symptoms indicate possible respiratory distress or cardiovascular concern.'
+          : isMedium
+          ? 'Symptoms correlate with possible vector-borne or viral infection.'
+          : 'Mild seasonal symptoms detected.',
+        recommendations: isHigh
+          ? ['Keep patient upright', 'Administer oxygen if available', 'Immediate hospital referral']
+          : isMedium
+          ? ['Maintain fluid intake (ORS)', 'CBC Blood Test at PHC', 'Monitor temperature every 4 hrs']
+          : ['Light diet (Khichdi, Curd rice)', 'Stay hydrated', 'Rest for 24 hours'],
+        emergencyAction: isHigh
+          ? 'Immediate Ambulance & Tele-Emergency Doctor Alerted!'
+          : 'Connect to Tele-Doctor within 30 minutes.',
+        riskSignals:    [],
+        doctorRequired: isHigh,
+      });
+    } finally {
       setAnalyzing(false);
-      if (symptom.includes("Fever") || symptom.includes("Joint")) {
-        setResult({
-          riskLevel: "Yellow (Moderate Risk)",
-          riskColor: "border-amber-500/50 bg-amber-500/10 text-amber-300",
-          badgeColor: "bg-amber-500/20 text-amber-300 border-amber-500/40",
-          summary: "Symptoms correlate with Vector-borne viral infection (Dengue/Chikungunya).",
-          recommendations: [
-            "Maintain high fluid intake (ORS, Coconut water)",
-            "Get a CBC Blood Test at nearest Primary Health Centre",
-            "Monitor body temp every 4 hours"
-          ],
-          emergencyAction: "Connect to Tele-Doctor within 30 minutes."
-        });
-      } else if (symptom.includes("Shortness") || symptom.includes("Dizziness")) {
-        setResult({
-          riskLevel: "Red (Critical Emergency Risk)",
-          riskColor: "border-rose-500/50 bg-rose-500/10 text-rose-300",
-          badgeColor: "bg-rose-500/20 text-rose-300 border-rose-500/40",
-          summary: "Symptoms indicate acute respiratory distress or cardiovascular drop.",
-          recommendations: [
-            "Keep patient in an upright sitting posture",
-            "Administer supplementary oxygen if ASHA worker kit available",
-            "Immediate hospital referral required"
-          ],
-          emergencyAction: "Immediate Ambulance & Tele-Emergency Doctor Alerted!"
-        });
-      } else {
-        setResult({
-          riskLevel: "Green (Mild Risk)",
-          riskColor: "border-emerald-500/50 bg-emerald-500/10 text-emerald-300",
-          badgeColor: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
-          summary: "Common seasonal gastroenteritis or digestive inflammation.",
-          recommendations: [
-            "Light diet (Khichdi, Curd rice)",
-            "Stay hydrated with boiled water",
-            "Rest for 24 hours"
-          ],
-          emergencyAction: "Standard tele-consultation recommended."
-        });
-      }
-    }, 1200);
+    }
   };
 
   const features = [

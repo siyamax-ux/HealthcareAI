@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "મુખ્ય પૃષ્ઠ",
+    "aiClinic": "AI વર્ચ્યુઅલ ક્લિનિક",
+    "voiceDoctor": "વૉઇસ ડૉક્ટર",
+    "aiLanguages": "AI ભાષાઓ",
+    "iotVitals": "IoT વાઇટલ્સ",
+    "emergency": "આપત્કાલ જોખમ",
+    "medicalOcr": "તબીબી OCR",
+    "diseasePrediction": "રોગ આગાહી",
+    "remoteDoctors": "દૂરસ્થ ડૉક્ટર",
+    "offlineSync": "ઑફ‌લાઇન સિંક",
+    "faq": "વારંવાર પૂછાતા પ્રશ્નો",
+    "launchClinic": "AI ક્લિનિક ખોલો",
+    "emergencySos": "AI આપત્કાલ SOS",
+    "languages": "ભાષાઓ",
+    "switchLanguage": "ભાષા બદલો"
+  },
+  "hero": {
+    "badge": "AI-સંચાલિત ગ્રામ્ય આરોગ્ય સેવા પ્લેટફૉર્મ",
+    "title": "દરેક ગામ માટે AI ડૉક્ટર",
+    "subtitle": "તત્કાળ બહુભાષી તબીબી સહાય — અવાજ, ટેક્સ્ટ અને AI નિદાન — 24/7 ઉપલબ્ધ।",
+    "startConsultation": "AI પરામર્શ શરૂ કરો",
+    "emergencyHelp": "આપત્કાલ સહાય",
+    "trustBadges": {
+      "available247": "24/7 ઉપલબ્ધ",
+      "multiLanguage": "બહુભાષી",
+      "emergencyReady": "આપત્કાલ તૈયાર",
+      "aiPowered": "AI સંચાલિત"
+    }
+  },
+  "assistant": {
+    "greeting": "નમસ્તે! 🙏",
+    "subtitle": "હું તમારો AI આરોગ્ય સહાયક છું. ગુજરાતીમાં પ્રશ્ન પૂછો.",
+    "placeholder": "આરોગ્ય પ્રશ્ન ટાઇપ કરો અથવા બોલો…",
+    "aiChat": "AI ચેટ",
+    "emergency": "આપત્કાલ",
+    "listening": "સાંભળી રહ્યો છું…",
+    "active": "સક્રિય · બહુભાષી",
+    "firstAid": "AI પ્રથમ સહાય"
+  },
+  "geo": {
+    "detecting": "સ્થાન શોધવામાં આવી રહ્યું છે…",
+    "detected": "સ્થાન મળ્યું",
+    "detectedLocation": "શોધાયેલ સ્થાન",
+    "languageSwitchedTo": "ભાષા બદલાઈ",
+    "aiReadyIn": "AI સહાયક તૈયાર છે",
+    "changeManually": "જાતે ભાષા બદલો",
+    "continueIn": "માં ચાલુ રાખો",
+    "couldNotDetect": "સ્થાન આપોઆપ શોધી શકાયું નહીં.",
+    "tryAgain": "ફરી પ્રયાસ કરો",
+    "healthSchemes": "આરોગ્ય યોજનાઓ",
+    "notification": "તમારા સ્થાન પ્રમાણે ભાષા બદલવામાં આવી."
+  },
+  "common": {
+    "loading": "લોડ થઈ રહ્યું છે…",
+    "close": "બંધ કરો",
+    "change": "બદલો",
+    "confirm": "પુષ્ટિ કરો",
+    "cancel": "રદ કરો",
+    "submit": "સબમિટ કરો",
+    "book": "એપોઇન્ટમેન્ટ બુક કરો",
+    "call": "ફોન કરો",
+    "readMore": "વધુ વાંચો"
+  }
+}

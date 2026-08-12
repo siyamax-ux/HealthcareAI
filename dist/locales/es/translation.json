@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "aiClinic": "Clínica Virtual IA",
+    "voiceDoctor": "Médico de Voz",
+    "aiLanguages": "Idiomas IA",
+    "iotVitals": "Signos Vitales IoT",
+    "emergency": "Riesgo de Emergencia",
+    "medicalOcr": "OCR Médico",
+    "diseasePrediction": "Predicción de Enfermedades",
+    "remoteDoctors": "Médicos Remotos",
+    "offlineSync": "Sincronización Sin Conexión",
+    "faq": "Preguntas Frecuentes",
+    "launchClinic": "Lanzar Clínica IA",
+    "emergencySos": "SOS Emergencia IA",
+    "languages": "Idiomas",
+    "switchLanguage": "Cambiar Idioma"
+  },
+  "hero": {
+    "badge": "Plataforma de Salud Rural Impulsada por IA",
+    "title": "Un Médico IA para Cada Pueblo",
+    "subtitle": "Asistencia médica multilingüe instantánea — voz, texto y diagnóstico IA — disponible 24/7.",
+    "startConsultation": "Iniciar Consulta IA",
+    "emergencyHelp": "Ayuda de Emergencia",
+    "trustBadges": {
+      "available247": "Disponible 24/7",
+      "multiLanguage": "Multilingüe",
+      "emergencyReady": "Listo para Emergencias",
+      "aiPowered": "Impulsado por IA"
+    }
+  },
+  "assistant": {
+    "greeting": "¡Hola! 👋",
+    "subtitle": "Soy su asistente de salud IA. Haga su pregunta en español.",
+    "placeholder": "Escriba o hable su consulta de salud…",
+    "aiChat": "Chat IA",
+    "emergency": "Emergencia",
+    "listening": "Escuchando…",
+    "active": "Activo · Multilingüe",
+    "firstAid": "Primeros Auxilios IA"
+  },
+  "geo": {
+    "detecting": "Detectando ubicación…",
+    "detected": "Ubicación detectada",
+    "detectedLocation": "Ubicación Detectada",
+    "languageSwitchedTo": "Idioma Cambiado a",
+    "aiReadyIn": "Asistente IA Listo En",
+    "changeManually": "Cambiar Idioma Manualmente",
+    "continueIn": "Continuar En",
+    "couldNotDetect": "No se pudo detectar la ubicación automáticamente.",
+    "tryAgain": "Intentar de nuevo",
+    "healthSchemes": "Planes de Salud",
+    "notification": "Idioma cambiado según su ubicación."
+  },
+  "common": {
+    "loading": "Cargando…",
+    "close": "Cerrar",
+    "change": "Cambiar",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "submit": "Enviar",
+    "book": "Reservar Cita",
+    "call": "Llamar",
+    "readMore": "Leer Más"
+  }
+}

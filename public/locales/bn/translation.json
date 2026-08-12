@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "home": "হোম",
+    "aiClinic": "AI ভার্চুয়াল ক্লিনিক",
+    "voiceDoctor": "ভয়েস ডাক্তার",
+    "aiLanguages": "AI ভাষাসমূহ",
+    "iotVitals": "IoT ভাইটালস",
+    "emergency": "জরুরি ঝুঁকি",
+    "medicalOcr": "মেডিকেল OCR",
+    "diseasePrediction": "রোগ পূর্বাভাস",
+    "remoteDoctors": "দূরবর্তী ডাক্তার",
+    "offlineSync": "অফলাইন সিঙ্ক",
+    "faq": "সাধারণ প্রশ্নাবলী",
+    "launchClinic": "AI ক্লিনিক খুলুন",
+    "emergencySos": "AI জরুরি SOS",
+    "languages": "ভাষাসমূহ",
+    "switchLanguage": "ভাষা পরিবর্তন করুন"
+  },
+  "hero": {
+    "badge": "AI-চালিত গ্রামীণ স্বাস্থ্যসেবা প্ল্যাটফর্ম",
+    "title": "প্রতিটি গ্রামের জন্য AI ডাক্তার",
+    "subtitle": "তাৎক্ষণিক বহুভাষী চিকিৎসা সহায়তা — ভয়েস, টেক্সট ও AI রোগনির্ণয় — ২৪/৭ উপলব্ধ।",
+    "startConsultation": "AI পরামর্শ শুরু করুন",
+    "emergencyHelp": "জরুরি সাহায্য",
+    "trustBadges": {
+      "available247": "২৪/৭ উপলব্ধ",
+      "multiLanguage": "বহুভাষী",
+      "emergencyReady": "জরুরির জন্য প্রস্তুত",
+      "aiPowered": "AI চালিত"
+    }
+  },
+  "assistant": {
+    "greeting": "নমস্কার! 🙏",
+    "subtitle": "আমি আপনার AI স্বাস্থ্য সহায়ক। বাংলায় প্রশ্ন করুন।",
+    "placeholder": "স্বাস্থ্য প্রশ্ন টাইপ করুন বা বলুন…",
+    "aiChat": "AI চ্যাট",
+    "emergency": "জরুরি",
+    "listening": "শুনছি…",
+    "active": "সক্রিয় · বহুভাষী",
+    "firstAid": "AI প্রাথমিক চিকিৎসা"
+  },
+  "geo": {
+    "detecting": "অবস্থান শনাক্ত হচ্ছে…",
+    "detected": "অবস্থান শনাক্ত হয়েছে",
+    "detectedLocation": "শনাক্ত করা অবস্থান",
+    "languageSwitchedTo": "ভাষা পরিবর্তিত হয়েছে",
+    "aiReadyIn": "AI সহায়ক প্রস্তুত",
+    "changeManually": "নিজে ভাষা পরিবর্তন করুন",
+    "continueIn": "তে চালিয়ে যান",
+    "couldNotDetect": "অবস্থান স্বয়ংক্রিয়ভাবে শনাক্ত করা যায়নি।",
+    "tryAgain": "আবার চেষ্টা করুন",
+    "healthSchemes": "স্বাস্থ্য প্রকল্প",
+    "notification": "আপনার অবস্থানের ভিত্তিতে ভাষা পরিবর্তন করা হয়েছে।"
+  },
+  "common": {
+    "loading": "লোড হচ্ছে…",
+    "close": "বন্ধ করুন",
+    "change": "পরিবর্তন করুন",
+    "confirm": "নিশ্চিত করুন",
+    "cancel": "বাতিল করুন",
+    "submit": "জমা দিন",
+    "book": "অ্যাপয়েন্টমেন্ট বুক করুন",
+    "call": "কল করুন",
+    "readMore": "আরও পড়ুন"
+  }
+}
